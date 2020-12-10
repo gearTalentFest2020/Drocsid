@@ -10,4 +10,4 @@ print("-------------------------Closing App-------------------------")
 contacts_file.close()
 #Aditya Chowdhary was not here
 #Vyoman was here.
-#Aryan had been having here. 
+#Aryan had been having here.
