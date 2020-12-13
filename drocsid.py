@@ -3,22 +3,39 @@ import sys, os, socket
 
 contacts = {}
 backgroundDefault = "#22303c"
+btnDefault = "#ffffff"
+btnTxtDefault = "#000000"
+
+def getButton( text, command = None, h = 1, w = 48):
+    temp = tk.Button( master = mainWindow, text = text, font = ("Calibri", 20), command = command, bg = btnDefault, fg = btnTxtDefault )
+    temp.config( height = h, width = w )
+    return temp
 
 # Function to load all contacts
 def loadContacts( ):
     pass
-# Function to add a contact
-def addContact( ID, name, IP ):
-    pass
-# Function to remove a contact
-def remContact( ID ):
-    pass
-# Function to alter a contact
-def altContact( ID, new ):
-    pass
+
 # Function to save all contacts
-def saveContact( ):
+def saveContacts( ):
     pass
+
+# Function to add a contact
+def addContact( ):
+    promptWindow = tk.Tk()
+    promptWindow.title( "Add Contact" )
+    promptWindow.geometry( "400x225" )
+
+# Function to remove a contact
+def remContact( ):
+    promptWindow = tk.Tk()
+    promptWindow.title( "Remove Contact" )
+    promptWindow.geometry( "400x225" )
+
+# Function to alter a contact
+def altContact( ):
+    promptWindow = tk.Tk()
+    promptWindow.title( "Edit Contact" )
+    promptWindow.geometry( "400x225" )
 
 print("-------------------------Starting App-------------------------")
 
@@ -39,10 +56,10 @@ mainWindow.geometry( "800x450" )
 
 # mainWindow.configure(bg=_from_rgb((0, 10, 255)))
 mainWindow.configure( bg = backgroundDefault )
-addContactBtn = tk.Button( master = mainWindow, text = "Add Contact", command = None )
-remContactBtn = tk.Button( master = mainWindow, text = "Remove Contact", command = None )
-altContactBtn = tk.Button( master = mainWindow, text = "Edit Contact", command = None )
-selRoomBtn = tk.Button( master = mainWindow, text = "Select chatroom", command = None )
+addContactBtn = getButton("Add Contact", command = addContact)
+remContactBtn = getButton("Remove Contact", command = remContact)
+altContactBtn = getButton("Edit Contact", command = altContact )
+selRoomBtn = getButton("Select Chatroom")
 
 addContactBtn.pack()
 remContactBtn.pack()
