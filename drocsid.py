@@ -6,8 +6,8 @@ backgroundDefault = "#22303c"
 btnDefault = "#ffffff"
 btnTxtDefault = "#000000"
 
-def getButton( text, command = None, h = 1, w = 48):
-    temp = tk.Button( master = mainWindow, text = text, font = ("Calibri", 20), command = command, bg = btnDefault, fg = btnTxtDefault )
+def getButton( text, command = None, h = 1, w = 48, fontSize = 20):
+    temp = tk.Button( master = mainWindow, text = text, font = ("Calibri", fontSize), command = command, bg = btnDefault, fg = btnTxtDefault )
     temp.config( height = h, width = w )
     return temp
 
@@ -24,6 +24,31 @@ def addContact( ):
     promptWindow = tk.Tk()
     promptWindow.title( "Add Contact" )
     promptWindow.geometry( "400x225" )
+
+    name, ID, IP = None, None, None
+
+    nameBox = tk.Entry( master = promptWindow)
+    nameBox.insert(string = "Enter Contact name Here", index = 0)
+
+    IPBox = tk.Entry( master = promptWindow)
+    IPBox.insert(string = "Enter IP address Here", index = 0)
+
+    IDBox = tk.Entry( master = promptWindow)
+    IDBox.insert(string = "Enter Contact name Here", index = 0)
+
+    def temp():
+        name, ID, IP = nameBox.get(), IDBox.get(), IPBox.get()
+
+    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = temp )
+    #confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : 1 )
+
+    nameBox.pack()
+    IPBox.pack()
+    IDBox.pack()
+
+    confirmBtn.pack()
+
+    promptWindow.mainloop()
 
 # Function to remove a contact
 def remContact( ):
