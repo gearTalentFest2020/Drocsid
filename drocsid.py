@@ -25,13 +25,13 @@ def addContact( ):
     promptWindow = getWindow( "Add Contact", "400x225" )
 
     name = tk.Entry( master = promptWindow)
-    name.insert(string = "Name", index = 0)
+    name.insert(string = "Enter contact's name", index = 0)
 
     ip = tk.Entry( master = promptWindow)
-    ip.insert(string = "IP", index = 0)
+    ip.insert(string = "Enter contact's IP", index = 0)
 
     ID = tk.Entry( master = promptWindow)
-    ID.insert(string = "ID", index = 0)
+    ID.insert(string = "Enter contact's ID", index = 0)
 
 
     confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.addContact( ID.get(), name.get(), ip.get() ) or promptWindow.destroy() )
@@ -50,7 +50,7 @@ def remContact( ):
     promptWindow = getWindow( "Remove Contact", "400x225" )
 
     ID = tk.Entry( master = promptWindow)
-    ID.insert(string = "ID", index = 0)
+    ID.insert(string = "Enter contact's ID", index = 0)
 
     confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.remContact(ID.get()) or promptWindow.destroy() )
 
@@ -65,7 +65,7 @@ def altContact( ):
     promptWindow = getWindow( "Edit Contact", "400x225" )
 
     ID = tk.Entry( master = promptWindow)
-    ID.insert(string = "ID", index = 0)
+    ID.insert(string = "Enter contact's ID", index = 0)
 
     name = tk.Entry( master = promptWindow)
 
