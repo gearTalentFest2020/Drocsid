@@ -114,6 +114,18 @@ def createChatroom( name ):
     open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
     open(name + '/Chats.txt', 'w') if(not os.path.exists(name + '/Chats.txt')) else None
 
+    return None
+    # return Chatroom.Chatroom( name )
+
+def deleteChatroom( name ):
+
+    name = "chatroom__" + name
+
+    try:
+        for fil in os.listdir(name): os.remove(name + '/' + fil)
+        os.rmdir(name)
+    except:
+        pass
 
 print("-------------------------Starting App-------------------------")
 
@@ -126,7 +138,6 @@ loadContacts()
 # Creating window
 mainWindow = getWindow( "Drocsid", "800x450" )
 
-# mainWindow.configure(bg=_from_rgb((0, 10, 255)))
 mainWindow.configure( bg = backgroundDefault )
 addContactBtn = getButton("Add Contact", command = addContact)
 remContactBtn = getButton("Remove Contact", command = remContact)
@@ -139,8 +150,6 @@ altContactBtn.pack()
 selRoomBtn.pack()
 
 mainWindow.mainloop()
-
-createChatroom("Test1")
 
 saveContacts()
 
