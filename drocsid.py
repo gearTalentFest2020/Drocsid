@@ -1,14 +1,10 @@
 import tkinter as tk
 import sys, os, socket
+import contacts
 
-contacts = {}
-backgroundDefault = "#22303c"
-btnDefault = "#ffffff"
-btnTxtDefault = "#000000"
+from theme import *
 
-# Helper functions
-def _dicset( dic, key, val):
-    dic[key] = val
+contacts = contacts.contactsManager()
 
 # Wrapper around windows
 def getWindow( title, geometry ):
@@ -22,23 +18,6 @@ def getButton( text, command = None, h = 1, w = 48, fontSize = 20):
     temp = tk.Button( master = mainWindow, text = text, font = ("Calibri", fontSize), command = command, bg = btnDefault, fg = btnTxtDefault )
     temp.config( height = h, width = w )
     return temp
-
-# Function to load all contacts
-def loadContacts( ):
-    open('Contacts.txt', 'w') if(not os.path.exists('Contacts.txt')) else None
-    contacts_file = open('Contacts.txt', 'r')
-
-    for line in contacts_file.readlines():
-        tokens = line.split(';')
-        tokens[2] = tokens[2][:-1]
-        assert len(tokens)==3, "Corrupted Contacts File"
-        contacts.setdefault(tokens[0], [tokens[1], tokens[2]])
-    contacts_file.close()
-
-# Function to save all contacts
-def saveContacts( ):
-    contacts_file = open('Contacts.txt', 'w')
-    for ID in contacts: contacts_file.write(ID + ";" + contacts[ID][0] + ";" + contacts[ID][1] + '\n')
 
 # Function to add a contact
 def addContact( ):
@@ -55,7 +34,7 @@ def addContact( ):
     ID.insert(string = "ID", index = 0)
 
 
-    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.setdefault( ID.get().strip(), [name.get().strip(), ip.get().strip()] ) and promptWindow.destroy() )
+    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.addContact( ID.get(), name.get(), ip.get() ) or promptWindow.destroy() )
 
     name.pack()
     ip.pack()
@@ -73,7 +52,7 @@ def remContact( ):
     ID = tk.Entry( master = promptWindow)
     ID.insert(string = "ID", index = 0)
 
-    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.pop(ID.get().strip()) and promptWindow.destroy() )
+    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.remContact(ID.get()) or promptWindow.destroy() )
 
     ID.pack()
     confirmBtn.pack()
@@ -93,7 +72,7 @@ def altContact( ):
     ip = tk.Entry( master = promptWindow)
 
     confirmBtn1 = tk.Button( master = promptWindow, text = "Edit", font = ("Calibri", 12), command = lambda : name.insert(string = contacts[ID.get().strip()][0], index = 0) or ip.insert(string = contacts[ID.get().strip()][1], index = 0) )
-    confirmBtn2 = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : _dicset( contacts, ID.get().strip(), [name.get(), ip.get()] ) or promptWindow.destroy() )
+    confirmBtn2 = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.altContact( ID.get(), name.get(), ip.get() ) or promptWindow.destroy() )
 
     ID.pack()
     name.pack()
@@ -127,22 +106,36 @@ def deleteChatroom( name ):
     except:
         pass
 
+def selectChatroom( ):
+    global mainWindow
+
 print("-------------------------Starting App-------------------------")
 
-open('Contacts.txt', 'w') if(not os.path.exists('Contacts.txt')) else None
-contacts_file = open('Contacts.txt', 'r')
-
 # Loading contacts
-loadContacts()
+contacts.loadAll( )
 
 # Creating window
 mainWindow = getWindow( "Drocsid", "800x450" )
-
 mainWindow.configure( bg = backgroundDefault )
+
+# This is the part of the screen where you can click to add, remove, alter contacts and chatrooms
+optionsFrame = tk.Frame(mainWindow, bg = optBackgroundDefault )
+#optionsFrame.grid( row = 0, column = 0, stick = "NW" )
+optionsFrame.pack()
+
+
+# These are the frames which replace the main screen upon selecting an option
+addContactFrame = None
+remContactFrame = None
+AltContactFrame = None
+
+# This is the frame for selecting the chatrooms
+selectChatroomFrame = None
+
 addContactBtn = getButton("Add Contact", command = addContact)
 remContactBtn = getButton("Remove Contact", command = remContact)
 altContactBtn = getButton("Edit Contact", command = altContact )
-selRoomBtn = getButton("Select Chatroom")
+selRoomBtn = getButton("Select Chatroom", command = selectChatroom )
 
 addContactBtn.pack()
 remContactBtn.pack()
@@ -151,7 +144,8 @@ selRoomBtn.pack()
 
 mainWindow.mainloop()
 
-saveContacts()
+# saveContacts()
+contacts.saveAll( )
 
 print("-------------------------Closing App-------------------------")
-contacts_file.close()
+#contacts_file.close()
