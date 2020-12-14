@@ -6,15 +6,18 @@ backgroundDefault = "#22303c"
 btnDefault = "#ffffff"
 btnTxtDefault = "#000000"
 
+# Helper functions
 def _dicset( dic, key, val):
     dic[key] = val
 
+# Wrapper around windows
 def getWindow( title, geometry ):
     temp = tk.Tk()
     temp.title( title )
     temp.geometry( geometry )
     return temp
 
+# Wrapper around buttons
 def getButton( text, command = None, h = 1, w = 48, fontSize = 20):
     temp = tk.Button( master = mainWindow, text = text, font = ("Calibri", fontSize), command = command, bg = btnDefault, fg = btnTxtDefault )
     temp.config( height = h, width = w )
@@ -101,6 +104,17 @@ def altContact( ):
 
     promptWindow.mainloop()
 
+def createChatroom( name ):
+
+    name = "chatroom__" + name
+
+    try: os.mkdir( name )
+    except: pass
+
+    open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
+    open(name + '/Chats.txt', 'w') if(not os.path.exists(name + '/Chats.txt')) else None
+
+
 print("-------------------------Starting App-------------------------")
 
 open('Contacts.txt', 'w') if(not os.path.exists('Contacts.txt')) else None
@@ -125,6 +139,8 @@ altContactBtn.pack()
 selRoomBtn.pack()
 
 mainWindow.mainloop()
+
+createChatroom("Test1")
 
 saveContacts()
 
