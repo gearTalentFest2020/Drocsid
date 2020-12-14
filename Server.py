@@ -20,10 +20,18 @@ while True:
     # data_format = 'uniqeid;privIP;privPort;con/bye/...'
 
     tokens = data.split(';')
+    if(ip_table.get(tokens[0], None)): ip_table[tokens[0]] = [None, None, None, None]
+    ip_table[tokens[0]][0] = addr[0]
+    ip_table[tokens[0]][1] = addr[1]
+    ip_table[tokens[0]][2] = tokens[1]
+    ip_table[tokens[0]][3] = tokens[2]
+    
     # tokens[0] contains senders phone number (ALWAYS)
-    # tokens[1] contains the type of request (ALWAYS)
+    # tokens[1] contains the private IP (ALWAYS)
+    # tokens[2] contains the private port (ALWAYS)
+    # tokens[3] contains type of request (ALWAYS)
 
-    # tokens[2] contains
+    # tokens[4] contains
     #   the private ip (in case of ip sync)
     #   the recivers phone number (in case of ip request
     #   the recievers phone number (in case of creation of chatroom)
@@ -37,9 +45,7 @@ while True:
     # '<number1>;con/bye/create/delete;privip/number2;'
 
     # When you come online and go offline
-    if(tokens[0] == 'con'):
-        ip_table[tokens[1]] = list(addr)
-    elif(tokens[0] == 'bye'):
+    if(tokens[0] == 'bye'):
         ip_table.pop(tokens[1])
     elif(tokens[0] == 'req'):
         toSend = ip_table.get(tokens[1], None)
