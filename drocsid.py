@@ -6,6 +6,9 @@ backgroundDefault = "#22303c"
 btnDefault = "#ffffff"
 btnTxtDefault = "#000000"
 
+def _dicset( dic, key, val):
+    dic[key] = val
+
 def getWindow( title, geometry ):
     temp = tk.Tk()
     temp.title( title )
@@ -22,7 +25,6 @@ def loadContacts( ):
     open('Contacts.txt', 'w') if(not os.path.exists('Contacts.txt')) else None
     contacts_file = open('Contacts.txt', 'r')
 
-    # Loading contacts
     for line in contacts_file.readlines():
         tokens = line.split(';')
         tokens[2] = tokens[2][:-1]
@@ -49,7 +51,8 @@ def addContact( ):
     ID = tk.Entry( master = promptWindow)
     ID.insert(string = "ID", index = 0)
 
-    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.setdefault( ID.get(), [name.get(), ip.get()] ) and promptWindow.destroy() )
+
+    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.setdefault( ID.get().strip(), [name.get().strip(), ip.get().strip()] ) and promptWindow.destroy() )
 
     name.pack()
     ip.pack()
@@ -64,10 +67,39 @@ def remContact( ):
 
     promptWindow = getWindow( "Remove Contact", "400x225" )
 
+    ID = tk.Entry( master = promptWindow)
+    ID.insert(string = "ID", index = 0)
+
+    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.pop(ID.get().strip()) and promptWindow.destroy() )
+
+    ID.pack()
+    confirmBtn.pack()
+
+    promptWindow.mainloop()
+
 # Function to alter a contact
 def altContact( ):
 
     promptWindow = getWindow( "Edit Contact", "400x225" )
+
+    ID = tk.Entry( master = promptWindow)
+    ID.insert(string = "ID", index = 0)
+
+    name = tk.Entry( master = promptWindow)
+
+    ip = tk.Entry( master = promptWindow)
+
+    confirmBtn1 = tk.Button( master = promptWindow, text = "Edit", font = ("Calibri", 12), command = lambda : name.insert(string = contacts[ID.get().strip()][0], index = 0) or ip.insert(string = contacts[ID.get().strip()][1], index = 0) )
+    confirmBtn2 = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : _dicset( contacts, ID.get().strip(), [name.get(), ip.get()] ) or promptWindow.destroy() )
+
+    ID.pack()
+    name.pack()
+    ip.pack()
+
+    confirmBtn1.pack()
+    confirmBtn2.pack()
+
+    promptWindow.mainloop()
 
 print("-------------------------Starting App-------------------------")
 
