@@ -38,6 +38,7 @@ def addContact( ):
 
     def temp():
         name, ID, IP = nameBox.get(), IDBox.get(), IPBox.get()
+        promptWindow.destroy()
 
     confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = temp )
     #confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : 1 )
