@@ -52,7 +52,7 @@ def remContact( ):
     ID = tk.Entry( master = promptWindow)
     ID.insert(string = "Enter contact's ID", index = 0)
 
-    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.remContact(ID.get()) or promptWindow.destroy() )
+    confirmBtn = tk.Button( master = promptWindow, text = "Remove", font = ("Calibri", 12), command = lambda : contacts.remContact(ID.get()) or promptWindow.destroy() )
 
     ID.pack()
     confirmBtn.pack()
@@ -68,8 +68,10 @@ def altContact( ):
     ID.insert(string = "Enter contact's ID", index = 0)
 
     name = tk.Entry( master = promptWindow)
-
+    name.insert(string= "Enter Name", index=0)
+    
     ip = tk.Entry( master = promptWindow)
+    ip.insert(string= "Enter contact's IP", index=0)
 
     confirmBtn1 = tk.Button( master = promptWindow, text = "Edit", font = ("Calibri", 12), command = lambda : name.insert(string = contacts[ID.get().strip()][0], index = 0) or ip.insert(string = contacts[ID.get().strip()][1], index = 0) )
     confirmBtn2 = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.altContact( ID.get(), name.get(), ip.get() ) or promptWindow.destroy() )
