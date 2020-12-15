@@ -2,9 +2,15 @@ import tkinter as tk
 import sys, os, socket
 import contacts
 
+import selectors
+
 from theme import *
 
 contacts = contacts.contactsManager()
+
+# Create a socket
+sock = socket.socket()
+socketSelector = selectors.DefaultSelector()
 
 # Wrapper around windows
 def getWindow( title, geometry ):
@@ -27,17 +33,12 @@ def addContact( ):
     name = tk.Entry( master = promptWindow)
     name.insert(string = "Enter contact's name", index = 0)
 
-    ip = tk.Entry( master = promptWindow)
-    ip.insert(string = "Enter contact's IP", index = 0)
-
     ID = tk.Entry( master = promptWindow)
     ID.insert(string = "Enter contact's ID", index = 0)
 
-
-    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.addContact( ID.get(), name.get(), ip.get() ) or promptWindow.destroy() )
+    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.addContact( ID.get(), name.get()) or promptWindow.destroy() )
 
     name.pack()
-    ip.pack()
     ID.pack()
 
     confirmBtn.pack()
@@ -68,17 +69,12 @@ def altContact( ):
     ID.insert(string = "Enter contact's ID", index = 0)
 
     name = tk.Entry( master = promptWindow)
-    name.insert(string= "Enter Name", index=0)
-    
-    ip = tk.Entry( master = promptWindow)
-    ip.insert(string= "Enter contact's IP", index=0)
 
-    confirmBtn1 = tk.Button( master = promptWindow, text = "Edit", font = ("Calibri", 12), command = lambda : name.insert(string = contacts[ID.get().strip()][0], index = 0) or ip.insert(string = contacts[ID.get().strip()][1], index = 0) )
-    confirmBtn2 = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.altContact( ID.get(), name.get(), ip.get() ) or promptWindow.destroy() )
+    confirmBtn1 = tk.Button( master = promptWindow, text = "Edit", font = ("Calibri", 12), command = lambda : name.insert(string = contacts[ID.get().strip()], index = 0))
+    confirmBtn2 = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.altContact( ID.get(), name.get() ) or promptWindow.destroy())
 
     ID.pack()
     name.pack()
-    ip.pack()
 
     confirmBtn1.pack()
     confirmBtn2.pack()
@@ -111,10 +107,16 @@ def deleteChatroom( name ):
 def selectChatroom( ):
     global mainWindow
 
+def sendMsg( ):
+    pass
+
+def recvMsg( ):
+    pass
+
 print("-------------------------Starting App-------------------------")
 
 # Loading contacts
-contacts.loadAll( )
+UID = contacts.loadAll( )
 
 # Creating window
 mainWindow = getWindow( "Drocsid", "800x450" )
