@@ -28,50 +28,49 @@ def getButton( text, command = None, h = 1, w = 48, fontSize = 20):
 # Function to add a contact
 def addContact( ):
 
-    promptWindow = getWindow( "Add Contact", "400x225" )
+    addContactFrame = tk.Frame( master = mainWindow )
 
-    name = tk.Entry( master = promptWindow)
+    name = tk.Entry( master = addContactFrame)
     name.insert(string = "Enter contact's name", index = 0)
 
-    ID = tk.Entry( master = promptWindow)
+    ID = tk.Entry( master = addContactFrame)
     ID.insert(string = "Enter contact's ID", index = 0)
 
-    confirmBtn = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.addContact( ID.get(), name.get()) or promptWindow.destroy() )
+    confirmBtn = tk.Button( master = addContactFrame, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.addContact( ID.get(), name.get()) or addContactFrame.destroy() )
 
     name.pack()
     ID.pack()
 
     confirmBtn.pack()
-
-    promptWindow.mainloop()
+    addContactFrame.grid( row = 0, column = 1 )
 
 # Function to remove a contact
 def remContact( ):
 
-    promptWindow = getWindow( "Remove Contact", "400x225" )
+    remContactFrame = tk.Frame( master = mainWindow )
 
-    ID = tk.Entry( master = promptWindow)
+    ID = tk.Entry( master = remContactFrame)
     ID.insert(string = "Enter contact's ID", index = 0)
 
-    confirmBtn = tk.Button( master = promptWindow, text = "Remove", font = ("Calibri", 12), command = lambda : contacts.remContact(ID.get()) or promptWindow.destroy() )
+    confirmBtn = tk.Button( master = remContactFrame, text = "Remove", font = ("Calibri", 12), command = lambda : contacts.remContact(ID.get()) or remContactFrame.destroy() )
 
     ID.pack()
     confirmBtn.pack()
 
-    promptWindow.mainloop()
+    remContactFrame.grid( row = 0, column = 1 )
 
 # Function to alter a contact
 def altContact( ):
 
-    promptWindow = getWindow( "Edit Contact", "400x225" )
+    altContactFrame = tk.Frame( master = mainWindow )
 
-    ID = tk.Entry( master = promptWindow)
+    ID = tk.Entry( master = altContactFrame )
     ID.insert(string = "Enter contact's ID", index = 0)
 
-    name = tk.Entry( master = promptWindow)
+    name = tk.Entry( master = altContactFrame )
 
-    confirmBtn1 = tk.Button( master = promptWindow, text = "Edit", font = ("Calibri", 12), command = lambda : name.insert(string = contacts[ID.get().strip()], index = 0))
-    confirmBtn2 = tk.Button( master = promptWindow, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.altContact( ID.get(), name.get() ) or promptWindow.destroy())
+    confirmBtn1 = tk.Button( master = altContactFrame, text = "Edit", font = ("Calibri", 12), command = lambda : name.insert(string = contacts[ID.get().strip()], index = 0))
+    confirmBtn2 = tk.Button( master = altContactFrame, text = "Submit", font = ("Calibri", 12), command = lambda : contacts.altContact( ID.get(), name.get() ) or altContactFrame.destroy())
 
     ID.pack()
     name.pack()
@@ -79,7 +78,7 @@ def altContact( ):
     confirmBtn1.pack()
     confirmBtn2.pack()
 
-    promptWindow.mainloop()
+    altContactFrame.grid( row = 0, column = 1 )
 
 def createChatroom( name ):
 
@@ -125,11 +124,6 @@ mainWindow.configure( bg = backgroundDefault )
 # This is the part of the screen where you can click to add, remove, alter contacts and chatrooms
 optionsFrame = tk.Frame( mainWindow )
 
-# These are the frames which replace the main screen upon selecting an option
-addContactFrame = tk.Frame( mainWindow )
-remContactFrame = tk.Frame( mainWindow )
-altContactFrame = tk.Frame( mainWindow )
-
 # This is the frame for selecting the chatrooms
 selectChatroomFrame = tk.Frame( mainWindow )
 
@@ -149,12 +143,6 @@ altContactBtn.pack()
 selRoomBtn.pack()
 
 optionsFrame.grid( row = 0, column = 0 )
-
-# addContactFrame.grid( row = 0, column = 0 )
-# remContactFrame.grid( row = 0, column = 0 )
-# altContactFrame.grid( row = 0, column = 0 )
-
-# selectChatroomFrame.grid( row = 0, column = 0 )
 
 mainWindow.mainloop()
 
