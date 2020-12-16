@@ -51,3 +51,33 @@ class contactsManager:
 
     def __getitem__( self, key ):
         return self.contacts.get(key, None)
+
+class memberManager:
+
+    def __init__( self, filePath ):
+        self.members = []
+        self.filePath = filePath
+
+    def loadAll( self ):
+        f = open(self.filePath, 'r')
+        lines = f.readlines()
+        for line in lines:
+            UID = line[:-1]
+            self.members.append(UID)
+        f.close()
+
+    def update( self ):
+        f = open(filePath, 'w')
+        for UID in self.members:
+            f.write(UID + '\n')
+        f.close()
+
+    def saveAll( self ):
+        self.update()
+
+    def __getitem__( self, key ):
+        return self.members[key]
+
+    def __setitem__( self, key, value ):
+        self.members[key] = value
+        self.update()

@@ -27,21 +27,18 @@ sendPrefix = str(UID) + ';' # + str(priv_ip) + ';' + str(myPort)
 
 # ! TODO IF NOT PUBLICLY HOSTING
 # virtually connect to server
-# print("punching")
 sock.sendto(b'', server)
 #data, addr = sock.recvfrom(BUFSIZ)
 # print(addr)
 sock.sendto('1VsV3V;online'.encode('utf-8'), server)
 sock.sendto('1VsV3V;online'.encode('utf-8'), server)
 sock.sendto('1VsV3V;send;1VsV3V;chatroom;helloworld'.encode('utf-8'), server)
-# print("punched")
 sock.setblocking( False )
 
 def genUID():
     pass
 
 def send( msg = '' ):
-    m = "hello world"
     for contact in chatroom_UIDs:
         msg = sendPrefix + "send;" + str(contact) + ';' + str(active_chatroom) + ';' + m
         msg = msg.encode("UTF-8") # encode the string
