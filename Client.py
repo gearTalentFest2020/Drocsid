@@ -55,7 +55,47 @@ def recv():
         data = data.decode()
         print('address:', addr)
         if data:
-            print(serverIP + ': ' + str(data))
+
+            tokens = data.split(';')
+
+            if(tokens[0] == 'recv'):
+                name = tokens[1]
+                sender = tokens[2]
+                msg = tokens[3]
+                save(name, '1234', sender, msg)
+
+            elif(tokens[0] == 'create'):
+                name = tokens[1]
+                members = tokens[2:]
+
+                name = "chatroom__" + name
+
+                try: os.mkdir( name )
+                except: pass
+
+                open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
+                f = open(name + '/People.txt', 'w')
+                for member in members: f.write(member + '\n')
+
+                create( name )
+
+            elif(tokens[0] == 'remove'):
+                name = tokens[1]
+                sender = tokens[2]
+
+                members = []
+
+                f = open('chatroom__' + name + '/People.txt', 'r')
+                lines = f.readlines()
+                for line in lines:
+                    line = line[:-1]
+                    if(line != sender): members.append(line)
+
+                f.close()
+                f = open('chatroom__' + name + '/People.txt', 'r')
+                for member in members:
+                    f.write(member + '\n')
+                f.close()
 
 def create():
     m = sendPrefix + 'create;'
@@ -69,7 +109,7 @@ def stop():
 
 target = 'chats'
 
-def create( self , chatroom ):
+def create( chatroom ):
     name  =  chatroom + '/' + target + '.db'
     conn  =  sqlite3.connect( name )
     c = conn.cursor()
