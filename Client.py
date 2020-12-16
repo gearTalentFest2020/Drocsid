@@ -19,22 +19,31 @@ chatroom_UIDs = []
 active_chatroom = None
 
 priv_ip = socket.gethostbyname(socket.gethostname())
-serverIP = '35.233.187.196'
+serverIP = '104.196.65.135'
 serverPort = 16384
 server = (serverIP, serverPort)
 sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
 
 
 # ! TODO IF NOT PUBLICLY HOSTING
-# virtually connect to server
-# print("punching")
-sock.sendto(b'', server)
-#data, addr = sock.recvfrom(BUFSIZ)
+# # virtually connect to server
+# # print("punching")
+# sock.sendto(b'', server)
+# data, addr = sock.recvfrom(BUFSIZ)
 # print(addr)
-sock.sendto('1VsV3V;online'.encode('utf-8'), server)
-sock.sendto('1VsV3V;online'.encode('utf-8'), server)
-sock.sendto('1VsV3V;send;1VsV3V;chatroom;helloworld'.encode('utf-8'), server)
-# print("punched")
+# sock.sendto('1VsV3V;online'.encode('utf-8'), server)
+# time.sleep(3)
+# print('Sending 2nd time')
+# sock.sendto('1VsV3V;online'.encode('utf-8'), server)
+# time.sleep(1)
+# sock.sendto('1VsV3V;create;1VsV3V;mytestchat;abc123;xyz456'.encode('utf-8'), server)
+# time.sleep(1)
+# sock.sendto('1VsV3V;send;1VsV3V;mytestchat;arandomthing1234'.encode('utf-8'), server)
+# time.sleep(1)
+# sock.sendto('1VsV3V;remove;abc123;mytestchat'.encode('utf-8'), server)
+# time.sleep(1)
+# # print("punched")
+# sock.sendto('1VsV3V;ofline'.encode('utf-8'), server)
 sock.setblocking( False )
 
 def genUID():
@@ -54,15 +63,16 @@ def recv():
         data, addr = sock.recvfrom(BUFSIZ)
         data = data.decode()
         print('address:', addr)
+        print(data)
         if data:
 
             tokens = data.split(';')
 
             if(tokens[0] == 'recv'):
-                name = tokens[1]
+                name = "chatroom__" + tokens[1]
                 sender = tokens[2]
                 msg = tokens[3]
-                save(name, '1234', sender, msg)
+                save(name, str(time.time()), sender, msg)
 
             elif(tokens[0] == 'create'):
                 name = tokens[1]
@@ -96,6 +106,7 @@ def recv():
                 for member in members:
                     f.write(member + '\n')
                 f.close()
+                print(members)
 
 def create():
     m = sendPrefix + 'create;'
