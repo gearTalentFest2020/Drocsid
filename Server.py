@@ -44,7 +44,7 @@ def networking( ):
                         msg += ';' + query[2]
 
                     if(query[0] == 'recv'):
-                        msg += ';' + 'arandomthing'
+                        msg += ';' + query[2] + ';' + query[3] + ';'
 
                     listener.sendto(msg.encode('utf8'), ip_table[key])
 
