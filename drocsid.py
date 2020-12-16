@@ -207,7 +207,7 @@ altContactBtn.pack()
 selRoomBtn.pack()
 optionsFrame.grid( row = 1, column = 0 )
 
-
+Client.UID = UID
 while True:
     Client.recv()
     try:
