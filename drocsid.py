@@ -209,6 +209,7 @@ optionsFrame.grid( row = 1, column = 0 )
 
 
 while True:
+    Client.recv()
     try:
         mainWindow.update_idletasks()
         mainWindow.update()
