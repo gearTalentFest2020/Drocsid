@@ -191,7 +191,13 @@ altContactBtn.pack()
 selRoomBtn.pack()
 optionsFrame.grid( row = 1, column = 0 )
 
-mainWindow.mainloop()
+
+while True:
+    try:
+        mainWindow.update_idletasks()
+        mainWindow.update()
+    except Exception as e:
+        break
 
 # saveContacts()
 contacts.saveAll( )
