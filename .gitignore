@@ -136,3 +136,4 @@ dmypy.json
 Worlds/*
 .vscode/
 .vs
+.DS_Store*

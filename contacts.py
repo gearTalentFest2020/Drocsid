@@ -1,4 +1,9 @@
-import os, sys
+import os, sys, json
+import socket, time, requests
+from baseChange import *
+
+import hashlib
+import Client
 
 class contactsManager:
 
@@ -40,8 +45,9 @@ class contactsManager:
         self.contacts[ID.strip()] = name.strip()
 
     def generateUID( self ):
-        # The UID generation code comes here
-        return "a"
+        timestamp = str(int(time.time()))
+        UID = convert(str(timestamp), 10, 64)[:-2]
+        return UID
 
     def __getitem__( self, key ):
         return self.contacts[key]
