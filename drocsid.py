@@ -121,47 +121,80 @@ def altContact( ):
 
     altContactFrame.grid( row = 1, column = 1 , sticky = tk.E )
 
-def createChatroom( name ):
+def createChatroom():
+    CreateChatFrame = tk.Frame(master=chatwindow)
 
-    name = "chatroom__" + name
+    name = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
+    name.insert(string="Enter Chatroom name", index=0)
+    chatname = name.get()
 
-    try: os.mkdir( name )
+    people = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
+    people.insert(string="Enter UIDs of the people you wish to chat with", index=0)
+
+    confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= lambda:Client.get(0,name.get()) or CreateChatFrame.destroy, fg="#008000")
+    backBtn = tk.Button(master=CreateChatFrame, text="Cancel", font=("Calibri", 16), command = CreateChatFrame.destroy)
+
+    CreateChatFrame.grid(rowspan = 3,column=1)
+    name.pack()
+    people.pack()
+    confirmBtn.pack()
+    backBtn.pack()
+
+    chatname = "chatroom__" + chatname
+
+    try: os.mkdir( chatname )
     except: pass
 
-    open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
+    open(chatname + '/People.txt', 'w') if(not os.path.exists(chatname + '/People.txt')) else None
 
-    #This stuff from here has been for GUI
-    chat = tk.Frame(master=chatwindow)
-    sendEntry = tk.Entry(master = chat)
-    sendBtn = tk.Button(master=chat, text = "Send")
 
-    sendEntry.pack(side = tk.BOTTOM)
-    sendBtn.pack(side = tk.BOTTOM)
-    chat.grid(rowspan = 10,column = 2)
+def deleteChatroom():
+    def Delete(chatname):
+        chatname = "chatroom__" + chatname
 
-def deleteChatroom( name ):
+        try:
+            for fil in os.listdir(chatname): os.remove(chatname + '/' + fil)
+            os.rmdir(chatname)
+        except:
+            pass
 
-    name = "chatroom__" + name
+        DeleteChatFrame.destroy
+    
+    DeleteChatFrame = tk.Frame(master = chatwindow)
+    name = tk.Entry(master=DeleteChatFrame, font=("Calibri", 16))
+    name.insert(string="Enter Chatroom name", index=0)
 
-    try:
-        for fil in os.listdir(name): os.remove(name + '/' + fil)
-        os.rmdir(name)
-    except:
-        pass
+    chatname = name.get()
 
-def selectChatroom( ):
+    confirmBtn = tk.Button(master=DeleteChatFrame, text="Submit", font=("Calibri", 16),command = Delete(chatname), fg="#008000")
+    backBtn = tk.Button(master=DeleteChatFrame, text="Cancel", font=("Calibri", 16), command=DeleteChatFrame.destroy)
+
+    DeleteChatFrame.grid(rowspan = 3,column=1)
+    name.pack()
+    confirmBtn.pack()
+    backBtn.pack()
+
+def editChatroom():
+    pass
+
+def openChatroom():
+    pass
+
+def selectChatroom():
     global mainWindow, chatwindow
-    contactslist = [("Chow",123),("Vyoman", 456), ("Aryan", 789)]
 
-    chatwindow = getWindow("Chats", geometry= "800x450")
-    chatwindow.config(bg = backgroundDefault)
 
-    rowno = 0
+    chatwindow = getWindow("Chats", geometry="800x450")
+    chatwindow.config(bg=backgroundDefault)
 
-    for i in contactslist:
-        btn = tk.Button(master = chatwindow,text = i[0], font = ("Calibri", 16), height = 1, width = 15, bg = "#ffffff", command = createChatroom(i[0]))
-        btn.grid(row = rowno, column = 0)
-        rowno+=1
+    createBtn = tk.Button(master=chatwindow, text="Create new chatroom", font=("Calibri", 16), height=1, width=20,bg="#ffffff", command=createChatroom)
+    editBtn = tk.Button(master=chatwindow, text="Edit chatroom", font=("Calibri", 16), height=1, width=20, bg="#ffffff",command=editChatroom)
+    deleteBtn = tk.Button(master=chatwindow, text="Delete chatroom", font=("Calibri", 16), height=1, width=20,bg="#ffffff", command=deleteChatroom)
+
+    createBtn.grid(row=0, column=0)
+    editBtn.grid(row=1, column=0)
+    deleteBtn.grid(row=2, column=0)
+
 
     chatwindow.mainloop()
 
