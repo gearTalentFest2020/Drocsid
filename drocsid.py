@@ -16,12 +16,6 @@ def getWindow( title, geometry ):
     temp.geometry( geometry )
     return temp
 
-# Wrapper around buttons
-def getButton( text, command = None, h = 1, w = 48, fontSize = 20):
-    temp = tk.Button( master = mainWindow, text = text, font = ("Calibri", fontSize), command = command, bg = btnDefault, fg = btnTxtDefault )
-    temp.config( height = h, width = w )
-    return temp
-
 # Function to add a contact
 def addContact( ):
 
@@ -136,6 +130,14 @@ def createChatroom( name ):
 
     open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
 
+    #This stuff from here has been for GUI
+    chat = tk.Frame(master=chatwindow)
+    sendEntry = tk.Entry(master = chat)
+    sendBtn = tk.Button(master=chat, text = "Send")
+
+    sendEntry.pack(side = tk.BOTTOM)
+    sendBtn.pack(side = tk.BOTTOM)
+    chat.grid(rowspan = 10,column = 2)
 
 def deleteChatroom( name ):
 
@@ -148,7 +150,21 @@ def deleteChatroom( name ):
         pass
 
 def selectChatroom( ):
-    global mainWindow
+    global mainWindow, chatwindow
+    contactslist = [("Chow",123),("Vyoman", 456), ("Aryan", 789)]
+
+    chatwindow = getWindow("Chats", geometry= "800x450")
+    chatwindow.config(bg = backgroundDefault)
+
+    rowno = 0
+
+    for i in contactslist:
+        btn = tk.Button(master = chatwindow,text = i[0], font = ("Calibri", 16), height = 1, width = 15, bg = "#ffffff", command = createChatroom(i[0]))
+        btn.grid(row = rowno, column = 0)
+        rowno+=1
+
+    chatwindow.mainloop()
+
 
 def sendMsg( ):
     pass
