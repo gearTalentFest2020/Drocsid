@@ -123,28 +123,38 @@ mainWindow = getWindow( "Drocsid", "800x450" )
 mainWindow.configure( bg = backgroundDefault )
 
 # This is the part of the screen where you can click to add, remove, alter contacts and chatrooms
-optionsFrame = tk.Frame(mainWindow, bg = optBackgroundDefault )
-#optionsFrame.grid( row = 0, column = 0, stick = "NW" )
-optionsFrame.pack()
-
+optionsFrame = tk.Frame( mainWindow )
 
 # These are the frames which replace the main screen upon selecting an option
-addContactFrame = None
-remContactFrame = None
-AltContactFrame = None
+addContactFrame = tk.Frame( mainWindow )
+remContactFrame = tk.Frame( mainWindow )
+altContactFrame = tk.Frame( mainWindow )
 
 # This is the frame for selecting the chatrooms
-selectChatroomFrame = None
+selectChatroomFrame = tk.Frame( mainWindow )
 
-addContactBtn = getButton("Add Contact", command = addContact)
-remContactBtn = getButton("Remove Contact", command = remContact)
-altContactBtn = getButton("Edit Contact", command = altContact )
-selRoomBtn = getButton("Select Chatroom", command = selectChatroom )
+addContactBtn = tk.Button( master = optionsFrame, text = "Add Contact", font = ("Calibri", 16), command = addContact, bg = btnDefault, fg = btnTxtDefault )
+remContactBtn = tk.Button( master = optionsFrame, text = "Remove Contact", font = ("Calibri", 16), command = remContact, bg = btnDefault, fg = btnTxtDefault )
+altContactBtn = tk.Button( master = optionsFrame, text = "Edit Contact", font = ("Calibri", 16), command = altContact, bg = btnDefault, fg = btnTxtDefault )
+selRoomBtn = tk.Button( master = optionsFrame, text = "Chats", font = ("Calibri", 16), command = selectChatroom, bg = btnDefault, fg = btnTxtDefault )
+
+addContactBtn.config( height = 2, width = 20 )
+remContactBtn.config( height = 2, width = 20 )
+altContactBtn.config( height = 2, width = 20 )
+selRoomBtn.config( height = 2, width = 20 )
 
 addContactBtn.pack()
 remContactBtn.pack()
 altContactBtn.pack()
 selRoomBtn.pack()
+
+optionsFrame.grid( row = 0, column = 0 )
+
+# addContactFrame.grid( row = 0, column = 0 )
+# remContactFrame.grid( row = 0, column = 0 )
+# altContactFrame.grid( row = 0, column = 0 )
+
+# selectChatroomFrame.grid( row = 0, column = 0 )
 
 mainWindow.mainloop()
 
