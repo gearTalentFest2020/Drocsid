@@ -1,16 +1,13 @@
 import tkinter as tk
 import sys, os, socket
 import contacts
+import Client
 
 import selectors
 
 from theme import *
 
 contacts = contacts.contactsManager()
-
-# Create a socket
-sock = socket.socket()
-socketSelector = selectors.DefaultSelector()
 
 # Wrapper around windows
 def getWindow( title, geometry ):
@@ -138,10 +135,7 @@ def createChatroom( name ):
     except: pass
 
     open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
-    open(name + '/Chats.txt', 'w') if(not os.path.exists(name + '/Chats.txt')) else None
 
-    return None
-    # return Chatroom.Chatroom( name )
 
 def deleteChatroom( name ):
 
@@ -203,4 +197,3 @@ mainWindow.mainloop()
 contacts.saveAll( )
 
 print("-------------------------Closing App-------------------------")
-#contacts_file.close()
