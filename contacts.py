@@ -1,5 +1,5 @@
 import os, sys, json
-import socket, time, requests
+import socket, time
 from baseChange import *
 
 import hashlib

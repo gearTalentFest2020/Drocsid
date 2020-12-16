@@ -29,7 +29,7 @@ sendPrefix = str(UID) + ';' # + str(priv_ip) + ';' + str(myPort)
 # virtually connect to server
 # print("punching")
 sock.sendto(b'', server)
-data, addr = sock.recvfrom(BUFSIZ)
+#data, addr = sock.recvfrom(BUFSIZ)
 # print(addr)
 sock.sendto('1VsV3V;online'.encode('utf-8'), server)
 sock.sendto('1VsV3V;online'.encode('utf-8'), server)
