@@ -46,7 +46,7 @@ def send( msg = '' ):
         sock.sendto(msg, server)  # sends message
 
 def recv():
-    events = socketManager.select( timeout = None )
+    events = socketManager.select( timeout = 0.01 )
     for (key, mask) in events:
         data, addr = sock.recvfrom(BUFSIZ)
         data = data.decode()
