@@ -1,5 +1,5 @@
 import os, sys, json
-import socket, time
+import socket, time, requests
 from baseChange import *
 
 import hashlib
@@ -50,4 +50,4 @@ class contactsManager:
         return UID
 
     def __getitem__( self, key ):
-        return self.contacts[key]
+        return self.contacts.get(key, None)
