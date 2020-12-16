@@ -1,13 +1,13 @@
 import tkinter as tk
 import sys, os, socket
-import contacts
+import Contacts
 import Client
 
 import selectors
 
 from theme import *
 
-contacts = contacts.contactsManager()
+contacts = Contacts.contactsManager()
 
 # Wrapper around windows
 def getWindow( title, geometry ):
