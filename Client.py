@@ -1,6 +1,5 @@
 import socket, sqlite3
 import pickle, bz2
-import requests
 import selectors, multiprocessing
 import sys, os
 
