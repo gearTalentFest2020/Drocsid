@@ -49,8 +49,6 @@ sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
 # # print("punching")
 sock.sendto(b'', server)
 sock.sendto(b'', server)
-data, addr = sock.recvfrom(BUFSIZ)
-print(addr)
 sock.sendto(b'', server)
 sock.sendto(b'', server)
 sock.sendto(b'', server)
@@ -89,9 +87,10 @@ def recv( ):
     for (key, mask) in events:
         data, addr = sock.recvfrom(BUFSIZ)
         data = data.decode()
-        print('address:', addr)
-        print(data)
+
         if data:
+            print('address:', addr)
+            print(data)
 
             tokens = data.split(';')
             query = []
