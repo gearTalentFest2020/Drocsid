@@ -32,7 +32,7 @@
 # for each targetUID in people in the chatroom
 
 # Client send a message on a particular chatroom
-# UID;send;targetUID;chatroomname;msg
+# UID;send;targetUID;chatroomname;time;msg
 # for each targetUID in people in the chatroom
 
 import socket

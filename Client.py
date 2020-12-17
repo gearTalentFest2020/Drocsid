@@ -35,10 +35,10 @@ myUID = None # Replace with the proper user unique ID
 socketManager = selectors.DefaultSelector()
 socketManager.register( sock, selectors.EVENT_READ, None )
 
-chatroom_UIDs = []
+# chatroom_UIDs = []
 active_chatroom = None
 
-serverIP = '104.196.65.135'
+serverIP = str(input('Enter the server IP address: '))
 serverPort = 16384
 server = (serverIP, serverPort)
 sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
@@ -47,9 +47,10 @@ sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
 # ! TODO IF NOT PUBLICLY HOSTING
 # # virtually connect to server
 # # print("punching")
-# sock.sendto(b'', server)
-# data, addr = sock.recvfrom(BUFSIZ)
-# print(addr)
+sock.sendto(b'', server)
+data, addr = sock.recvfrom(BUFSIZ)
+print(addr)
+sock.sendto(b'', server)
 # sock.sendto('1VsV3V;online'.encode('utf-8'), server)
 # time.sleep(3)
 # print('Sending 2nd time')
@@ -65,15 +66,21 @@ sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
 # sock.sendto('1VsV3V;ofline'.encode('utf-8'), server)
 sock.setblocking( False )
 
+def connect():
+    global sendPrefix
+    sendPrefix = str(myUID) + ';'
+    msg = sendPrefix + 'online'
+    msg = msg.encode('utf-8')
+    sock.sendto(msg, server)
 
-def send(chatroom, msg = '', timestamp=None ):
+def send(chatroom, chatroom_UIDs, timestamp=None, msg = '' ):
     if not timestamp: timestamp = time.time()
     for contact in chatroom_UIDs:
-        msg = sendPrefix + "send;" + str(contact) + ';' + str(active_chatroom) + ';' + msg
+        msg = sendPrefix + "send;" + str(contact) + ';' + str(chatroom) + ';' + str(timestamp) + ';' + msg
         msg = msg.encode("UTF-8") # encode the string
         sock.sendto(msg, server)  # sends message
 
-def recv():
+def recv( ):
     queryList = []
     events = socketManager.select( timeout = 0.01 )
     for (key, mask) in events:
@@ -84,55 +91,60 @@ def recv():
         if data:
 
             tokens = data.split(';')
-            queryList.append(tokens)
+            query = []
 
             if(tokens[0] == 'recv'):
-                name = "chatroom__" + tokens[1]
+                name = tokens[1]
                 sender = tokens[2]
                 msg = tokens[3]
+                query.append('addmsg')
+                query.append(name)
+                query.append(timestamp)
+                query.append(sender)
+                query.append(msg)
 
             elif(tokens[0] == 'create'):
                 name = tokens[1]
                 members = tokens[2:]
-
-                name = "chatroom__" + name
-
-                try: os.mkdir( name )
-                except: pass
-
-                open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
-                f = open(name + '/People.txt', 'w')
-                for member in members: f.write(member + '\n')
+                query.append('create')
+                query.append(name)
+                query.append(members)
 
             elif(tokens[0] == 'remove'):
                 name = tokens[1]
                 sender = tokens[2]
+                query.append('remove')
+                query.append(name)
+                query.append(sender)
 
-                members = []
+            elif(tokens[0] == 'addper'):
+                query.append('addper')
+                query.append(tokens[1])
+                query.append(tokens[2])
 
-                f = open('chatroom__' + name + '/People.txt', 'r')
-                lines = f.readlines()
-                for line in lines:
-                    line = line[:-1]
-                    if(line != sender): members.append(line)
-
-                f.close()
-                f = open('chatroom__' + name + '/People.txt', 'r')
-                for member in members:
-                    f.write(member + '\n')
-                f.close()
-                print(members)
+            queryList.append(query)
     return queryList
 
-def createforothers(chatroom, uids):
-    m = sendPrefix + 'create;' + str(chatroom) + ';' + ';'.join(uids)
+def createforothers( chatroom, uids ):
+    for uid in uids:
+        msg = sendPrefix + 'create;' + str(uid) + ';' + str(chatroom) + ';' + ';'.join(uids)
+        msg = msg.encode('utf-8')
+        sock.sendto(msg, server)
 
-def remove( temp ):
-    m = sendPrefix + 'remove;'
+def remove( chatroom, uids ):
+    for uid in uids:
+        msg = sendPrefix + 'remove;' + str(uid) + ';' + str(chatroom)
+        msg = msg.encode('utf-8')
+        sock.sendto(msg, server)
 
-def add(chatroom, uids):
-    pass
+def add( chatroom, uids , targetUID):
+    for uid in uids:
+        msg = sendPrefix + 'addper;' + str(uid) + ';' + str(chatroom) + ';' + str(targetUID)
+        msg = msg.encode('utf-8')
+        sock.sendto(msg, server)
 
 def stop():
-    m = sendPrefix + 'ofline'
+    msg = sendPrefix + 'ofline'
+    msg = msg.encode('utf-8')
+    sock.sendto(msg, server)
 

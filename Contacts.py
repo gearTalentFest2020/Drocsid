@@ -3,7 +3,7 @@ import socket, time, sqlite3
 from baseChange import *
 
 import hashlib
-import Client
+# import Client
 
 class contactsManager:
 
@@ -28,7 +28,7 @@ class contactsManager:
             self.contacts.setdefault(tokens[0], tokens[1])
         contacts_file.close()
 
-        return self.UID
+        return self.UID.strip()
 
     def saveAll( self ):
         contacts_file = open('Contacts.txt', 'w')
