@@ -254,8 +254,8 @@ def chatMainWindow(chatname):
         scrollbar = tk.Scrollbar(textCons)
         # place the scroll bar
         # into the gui window
-        scrollbar.place(relheight = 1, relx = 0.974) 
-        scrollbar.config(command = textCons.yview) 
+        scrollbar.place(relheight = 1, relx = 0.974)
+        scrollbar.config(command = textCons.yview)
         textCons.config(state = tk.DISABLED)
 
     # function to basically start the thread for sending messages
@@ -329,7 +329,7 @@ while True:
         elif(query[0] == 'delete'):
             chatsManager.deleteRoom( query[1] )
         elif(query[0] == 'add'):
-            pass
+            chatsManager.addMemberTo( query[1], query[2] )
 
     queryList = []
 
