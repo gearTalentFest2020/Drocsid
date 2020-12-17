@@ -100,7 +100,7 @@ def recv( ):
             if(tokens[0] == 'recv'):
                 name = tokens[1]
                 sender = tokens[2]
-                msg = tokens[4:]
+                msg = ";".join(tokens[4:])
                 timestamp = tokens[3]
                 query.append('addmsg')
                 query.append(name)
