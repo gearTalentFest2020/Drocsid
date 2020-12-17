@@ -108,14 +108,14 @@ def recv():
                 f.close()
                 print(members)
 
-def create():
-    m = sendPrefix + 'create;'
+def createforothers(chatroom, uids):
+    m = sendPrefix + 'create;' + str(chatroom) + ';' + ';'.join(uids)
 
 def remove():
     m = sendPrefix + 'remove;'
 
 def stop():
-    m = sendPrefix + 'exit;'
+    m = sendPrefix + 'ofline'
 
 
 target = 'chats'
