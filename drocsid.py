@@ -9,8 +9,8 @@ from theme import *
 
 contacts = Contacts.contactsManager()
 queryList = []
-['create', nameofroom, ]
-where do i put createdb
+#['create', nameofroom, ]
+
 # Wrapper around windows
 def getWindow( title, geometry ):
     temp = tk.Tk()
@@ -126,14 +126,21 @@ def altContact( ):
 def createChatroom():
     CreateChatFrame = tk.Frame(master=chatwindow)
 
+    def submit(chatname, uids):
+        Client.createforothers(chatname, uids)
+        querylist.append('create', chatname, uids)
+        CreateChatFrame.destroy
+
     name = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
     chatname = name.get()
 
     people = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
-    people.insert(string="Enter UIDs of the people you wish to chat with", index=0)
+    people.insert(string="Enter UIDs of the people seperated by commas and in square brackets", index=0)
+    uids = people.get()
+    uids.append(UID)
 
-    confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= lambda:Client.create(name.get()) or CreateChatFrame.destroy, fg="#008000")
+    confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= submit(chatname, uids), fg="#008000")
     backBtn = tk.Button(master=CreateChatFrame, text="Cancel", font=("Calibri", 16), command = CreateChatFrame.destroy)
 
     CreateChatFrame.grid(rowspan = 3,column=1)
@@ -142,31 +149,15 @@ def createChatroom():
     confirmBtn.pack()
     backBtn.pack()
 
-    chatname = "chatroom__" + chatname
-
-    try: os.mkdir( chatname )
-    except: pass
-
-    open(chatname + '/People.txt', 'w') if(not os.path.exists(chatname + '/People.txt')) else None
-    Client.create(chatname)
-
-
 def deleteChatroom():
     def Delete(chatname):
-        chatname = "chatroom__" + chatname
-
-        try:
-            for fil in os.listdir(chatname): os.remove(chatname + '/' + fil)
-            os.rmdir(chatname)
-        except:
-            pass
-
+        Client.remove(chatname)
+        querylist.append('delete', chatname)
         DeleteChatFrame.destroy
     
     DeleteChatFrame = tk.Frame(master = chatwindow)
     name = tk.Entry(master=DeleteChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
-
     chatname = name.get()
 
     confirmBtn = tk.Button(master=DeleteChatFrame, text="Submit", font=("Calibri", 16),command = Delete(chatname), fg="#008000")
@@ -178,42 +169,81 @@ def deleteChatroom():
     backBtn.pack()
 
 def editChatroom():
-    def Delete(chatname):
-        chatname = "chatroom__" + chatname
-
-        try:
-            for fil in os.listdir(chatname): os.remove(chatname + '/' + fil)
-            os.rmdir(chatname)
-        except:
-            pass
-
+    def Edit(chatname, UID_add):
+        Client.add(chatname, UID_add)
+        querylist.append('add', chatname, UID_add)
         EditChatFrame.destroy
 
     EditChatFrame = tk.Frame(master=chatwindow)
 
     name = tk.Entry(master=EditChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
-
-    peoplermv = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width= 36)
-    peoplermv.insert(string="Enter UIDs of the people you want to remove(type 0 for none)", index=0)
-
-    peopleadd = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width=36)
-    peopleadd.insert(string="Enter UIDs of the people you want to add(type 0 for none)", index=0)
-
     chatname = name.get()
 
-    confirmBtn = tk.Button(master=EditChatFrame, text="Submit", font=("Calibri", 16), command=Delete(chatname),fg="#008000")
+##    peoplermv = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width= 36)
+##    peoplermv.insert(string="Enter UIDs of the people you want to remove(type 0 for none)", index=0)
+
+    peopleadd = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width=36)
+    peopleadd.insert(string="Enter UID of the person you want to add", index=0)
+    UID_add = peopleadd.get() 
+
+    confirmBtn = tk.Button(master=EditChatFrame, text="Submit", font=("Calibri", 16), command=edit(chatname, UID_add),fg="#008000")
     backBtn = tk.Button(master=EditChatFrame, text="Cancel", font=("Calibri", 16), command=EditChatFrame.destroy)
 
     EditChatFrame.grid(rowspan=3, column=1)
     name.pack(fill = tk.X)
-    peoplermv.pack()
+##    peoplermv.pack()
     peopleadd.pack()
     confirmBtn.pack()
     backBtn.pack()
 
 def openChatroom():
     pass
+
+def chatMainWindow(chatname):
+    Window = tkinter.Tk()
+    def layout(name):
+
+        Window.title("Drocsid")
+        Window.configure(width = 450, height = 800, bg = "#17202A")
+        
+        labelHead = tkinter.Label(Window, bg = "#17202A", fg = "#EAECEE", text = name , font = "Helvetica 13 bold", pady = 5)
+        labelHead.place(relwidth = 1)
+        line = tkinter.Label(Window, width = 450, bg = "#ABB2B9")
+        line.place(relwidth = 1, rely = 0.07, relheight = 0.012)
+
+        global textCons
+        textCons = tkinter.Text(Window, height = 2, bg = "#17202A", fg = "#EAECEE", font = "Helvetica 14", padx = 5, pady = 5)
+        textCons.place(relheight = 0.745, relwidth = 1, rely = 0.08)
+        labelBottom = tkinter.Label(Window, bg = "#ABB2B9", height = 80)
+        labelBottom.place(relwidth = 1, rely = 0.825)
+
+        global entryMsg
+        entryMsg = tkinter.Entry(labelBottom, bg = "#2C3E50", fg = "#EAECEE", font = "Helvetica 13")
+         
+        # place the given widget
+        # into the gui window
+        entryMsg.place(relwidth = 0.74,relheight = 0.06, rely = 0.008, relx = 0.011)
+        entryMsg.focus()
+         
+        # create a Send Button
+        buttonMsg = tkinter.Button(labelBottom, text = "Send", font = "Helvetica 10 bold", width = 20, bg = "#ABB2B9", command = lambda :sendButton(entryMsg.get()))
+        buttonMsg.place(relx = 0.77, rely = 0.008, relheight = 0.06, relwidth = 0.22)
+        textCons.config(cursor = "arrow")
+         
+        # create a scroll bar
+        scrollbar = Scrollbar(textCons)
+        # place the scroll bar
+        # into the gui window
+        scrollbar.place(relheight = 1, relx = 0.974) 
+        scrollbar.config(command = textCons.yview) 
+        textCons.config(state = DISABLED)
+
+    # function to basically start the thread for sending messages
+    def sendButton(msg):
+            Client.send(msg)
+            querylist.append('recv', chatname, timestamp, UID,  msg)
+    layout(chatname)
 
 def selectChatroom():
     global mainWindow, chatwindow
@@ -233,20 +263,15 @@ def selectChatroom():
     deleteBtn.grid(row=2, column=0)
     openBtn.grid(row=3, column=0)
 
-
     chatwindow.mainloop()
 
-
-def sendMsg( ):
-    pass
-
-def recvMsg( ):
-    pass
+def chatWindow():
+    
 
 print("-------------------------Starting App-------------------------")
 
 # Loading contacts
-UID = contacts.loadAll( )
+global UID = contacts.loadAll( ) #Print it
 
 # Creating window
 mainWindow = getWindow("Drocsid","800x450")
