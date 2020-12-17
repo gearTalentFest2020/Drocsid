@@ -248,8 +248,7 @@ def chatMainWindow(chatname):
 
         # create a scroll bar
         scrollbar = tk.Scrollbar(textCons)
-        # place the scroll bar
-        # into the gui window
+        # place the scroll bar into the GUI window
         scrollbar.place(relheight = 1, relx = 0.974)
         scrollbar.config(command = textCons.yview)
         textCons.config(state = tk.DISABLED)

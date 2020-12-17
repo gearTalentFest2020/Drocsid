@@ -114,8 +114,13 @@ def networking( ):
 
             target = msg[2]
             name = msg[3]
-            data = msg[4]
-            #data = msg[4:]
+
+            # data = msg[4]
+
+            data = msg[4:]
+            temp = ''
+            for elem in data: temp += elem + ';'
+            data = temp[:-1]
 
             if(req_table.get(target, None) is None):
                 req_table[target] = []
