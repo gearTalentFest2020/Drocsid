@@ -48,8 +48,11 @@ sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
 # # virtually connect to server
 # # print("punching")
 sock.sendto(b'', server)
+sock.sendto(b'', server)
 data, addr = sock.recvfrom(BUFSIZ)
 print(addr)
+sock.sendto(b'', server)
+sock.sendto(b'', server)
 sock.sendto(b'', server)
 # sock.sendto('1VsV3V;online'.encode('utf-8'), server)
 # time.sleep(3)
@@ -96,7 +99,8 @@ def recv( ):
             if(tokens[0] == 'recv'):
                 name = tokens[1]
                 sender = tokens[2]
-                msg = tokens[3]
+                msg = tokens[3].split(';')[1]
+                timestamp = tokens[3].split(';')[0]
                 query.append('addmsg')
                 query.append(name)
                 query.append(timestamp)
@@ -105,7 +109,7 @@ def recv( ):
 
             elif(tokens[0] == 'create'):
                 name = tokens[1]
-                members = tokens[2:]
+                members = tokens[2:].split(';')
                 query.append('create')
                 query.append(name)
                 query.append(members)
