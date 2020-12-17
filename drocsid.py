@@ -296,13 +296,18 @@ def chatMainWindow(chatname):
         line = tk.Label(Window, width = 450, bg = "#ABB2B9")
         line.place(relwidth = 1, rely = 0.07, relheight = 0.012)
 
-        chats = tk.StringVar()
-        chats.set("")
-        chatlabel = tk.Label(master = Window, textvariable = chats)
+        tup_msgs = [("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye"),("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye"),("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye")]
+        msg = ""
+        for i in tup_msgs:
+            msg += i[0] + "\t" + i[1] + "\n" + i[2]+"\n\n"
+        print(msg)
+
 
         global textCons
         textCons = tk.Text(Window, height = 2, bg = "#17202A", fg = "#EAECEE", font = "Helvetica 14", padx = 5, pady = 5)
         textCons.place(relheight = 0.745, relwidth = 1, rely = 0.08)
+        textCons.insert(tk.END,msg)
+
         labelBottom = tk.Label(Window, bg = "#ABB2B9", height = 80)
         labelBottom.place(relwidth = 1, rely = 0.825)
 
@@ -330,16 +335,15 @@ def chatMainWindow(chatname):
     def sendButton():
         msg = entryMsg.get()
         timestamp = time.time()
-        Client.send(msg)
+        Client.send(chatname,chatsManager.getMembersOf(chatname),timestamp,msg)
         queryList.append(['recv', chatname, timestamp, UID,  msg])
 
     def printMsg():
-        # tup_msgs = chatsManager.getMsgsFrom(chatname,50)
-        chatlabel = tk.Label(master = Window,textvariable = chatmsg)
+        textCons.insert(0,chatmsg)
 
-        tup_msgs = [("12:00","Chow","Hello"),("12:01","Vyoman","Hi"),("12:02","Aryan","Bye"),("12:03","Agarwal","Goodbye")]
-        if tup_msgs:
-            print(tup_msgs)
+
+
+
 
     layout(chatname)
 

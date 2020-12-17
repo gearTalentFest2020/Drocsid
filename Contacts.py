@@ -50,7 +50,7 @@ class contactsManager:
         return UID
 
     def __getitem__( self, key ):
-        return self.contacts.get(key, None)
+        return self.contacts.get(key, key)
 
 class chatroomManager:
     target = "chats"
