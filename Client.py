@@ -104,7 +104,7 @@ def recv( ):
                 query.append(name)
                 query.append(timestamp)
                 query.append(sender)
-                query.append(msg)
+                query.append(msg.decode())
 
             elif(tokens[0] == 'create'):
                 name = tokens[1]
