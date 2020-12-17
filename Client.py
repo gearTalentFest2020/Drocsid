@@ -128,11 +128,17 @@ def recv( ):
             queryList.append(query)
     return queryList
 
-def createforothers( chatroom, uids ):
-    for uid in uids:
-        msg = sendPrefix + 'create;' + str(uid) + ';' + str(chatroom) + ';' + ';'.join(uids)
-        msg = msg.encode('utf-8')
-        sock.sendto(msg, server)
+def createforothers( chatroom, uids , target = None):
+    if target is None:
+        for uid in uids:
+            msg = sendPrefix + 'create;' + str(uid) + ';' + str(chatroom) + ';' + ';'.join(uids)
+            msg = msg.encode('utf-8')
+            sock.sendto(msg, server)
+    else:
+        for uid in uids:
+            msg = sendPrefix + 'create;' + str(target) + ';' + str(chatroom) + ';' + ';'.join(uids)
+            msg = msg.encode('utf-8')
+            sock.sendto(msg, server)
 
 def remove( chatroom, uids ):
     for uid in uids:
@@ -145,7 +151,9 @@ def add( chatroom, uids , targetUID):
         msg = sendPrefix + 'addper;' + str(uid) + ';' + str(chatroom) + ';' + str(targetUID)
         msg = msg.encode('utf-8')
         sock.sendto(msg, server)
-    createforothers(chatroom, [targetUID])
+    uids.append(targetUID)
+    uids.remove(myUID)
+    createforothers(chatroom, uids, targetUID)
 
 def stop():
     msg = sendPrefix + 'ofline'
