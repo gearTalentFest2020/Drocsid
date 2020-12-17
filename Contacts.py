@@ -1,5 +1,5 @@
 import os, sys, json
-import socket, time
+import socket, time, sqlite3
 from baseChange import *
 
 import hashlib
@@ -52,37 +52,8 @@ class contactsManager:
     def __getitem__( self, key ):
         return self.contacts.get(key, None)
 
-class memberManager:
-
-    def __init__( self, filePath ):
-        self.members = []
-        self.filePath = filePath
-
-    def loadAll( self ):
-        f = open(self.filePath, 'r')
-        lines = f.readlines()
-        for line in lines:
-            UID = line[:-1]
-            self.members.append(UID)
-        f.close()
-
-    def update( self ):
-        f = open(filePath, 'w')
-        for UID in self.members:
-            f.write(UID + '\n')
-        f.close()
-
-    def saveAll( self ):
-        self.update()
-
-    def __getitem__( self, key ):
-        return self.members[key]
-
-    def __setitem__( self, key, value ):
-        self.members[key] = value
-        self.update()
-
 class chatroomManager:
+    target = "chats"
 
     def __init__( self ):
         # Something comes here
@@ -114,9 +85,53 @@ class chatroomManager:
             fil.write(member + '\n')
         fil.close()
 
-    def addMsgTo( self, chatroom, message ):
+    def addMsgTo( self, chatroom, key, sender , msg ):
         chatroom = 'chatroom__' + chatroom
         # DB code comes here
+        # This part of the code adds a msg (UID, timestamp, msg) to the DB of the correct chatroom
+        name  =  chatroom + '/' + target + '.db'
+        conn  =  sqlite3.connect( name )
+        c = conn.cursor()
+        try:
+            ## Save string at new key location
+            c.execute( '''INSERT INTO chat (time, sender, msg) VALUES (?,?,?)''', ( key, sender, msg ) )
+            conn.commit()
+        except Exception as e:
+            pass
+        conn.close()
+
+    def getMsgsFrom( self, chatroom, n=50 ):
+        # n is number of last chats to get
+        chatroom = 'chatroom__' + chatroom
+        name  =  chatroom + '/' + target + '.db'
+        conn  =  sqlite3.connect( name )
+        c = conn.cursor()
+        c.execute('''SELECT time, sender, msg FROM chat''')
+        l = c.fetchall()
+        conn.commit()
+        conn.close()
+        return l[-1:-n-1:-1][::-1]
+
+    def createRoom( self, name ):
+
+        chatroom = 'chatroom__' + name
+        try: os.mkdir( name )
+        except: pass
+
+        open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
+
+        name  =  chatroom + '/' + target + '.db'
+        conn  =  sqlite3.connect( name )
+        c = conn.cursor()
+        try:
+            ## Create Table
+            c.execute( '''CREATE TABLE chat(time REAL NOT NULL PRIMARY KEY, sender TEXT, msg TEXT)''' )
+            conn.commit()
+
+        except Exception as e:
+            # print(e)
+            pass
+        conn.close()
 
     def deleteRoom( self, chatroom ):
         chatroom = 'chatroom__' + chatroom
@@ -125,3 +140,14 @@ class chatroomManager:
             os.rmdir(chatroom)
         except:
             pass
+
+    def getMembersOf( self, chatroom ):
+        chatroom = 'chatroom__' + chatroom
+        fil = open(chatroom+'/People.txt', 'r')
+        members = []
+        lines = fil.readlines()
+        for line in lines:
+            line = line[:-1]
+            members.append(line)
+        fil.close()
+        return members

@@ -8,7 +8,9 @@ import selectors
 from theme import *
 
 contacts = Contacts.contactsManager()
-
+queryList = []
+['create', nameofroom, ]
+where do i put createdb
 # Wrapper around windows
 def getWindow( title, geometry ):
     temp = tk.Tk()
@@ -278,7 +280,8 @@ optionsFrame.grid( row = 1, column = 0 )
 
 Client.UID = UID
 while True:
-    Client.recv()
+    clientList = Client.recv()
+    for q in clientList: queryList.append(q)
     try:
         mainWindow.update_idletasks()
         mainWindow.update()
