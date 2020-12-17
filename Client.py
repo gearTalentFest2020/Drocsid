@@ -76,8 +76,10 @@ def connect():
 
 def send(chatroom, chatroom_UIDs, timestamp=None, msg = '' ):
     if not timestamp: timestamp = time.time()
+    tmp = msg
     for contact in chatroom_UIDs:
-        msg = sendPrefix + "send;" + str(contact) + ';' + str(chatroom) + ';' + str(timestamp) + ';' + msg
+        print(msg)
+        msg = sendPrefix + "send;" + str(contact) + ';' + str(chatroom) + ';' + str(timestamp) + ';' + tmp
         msg = msg.encode("UTF-8") # encode the string
         sock.sendto(msg, server)  # sends message
 
