@@ -127,7 +127,7 @@ def recv():
 def createforothers(chatroom, uids):
     m = sendPrefix + 'create;' + str(chatroom) + ';' + ';'.join(uids)
 
-def remove():
+def remove( temp ):
     m = sendPrefix + 'remove;'
 
 def add(chatroom, uids):

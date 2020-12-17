@@ -125,24 +125,22 @@ def altContact( ):
 # ---------------------------------------------------------------------------------------------------- #
 
 def createChatroom():
-    CreateChatFrame = tk.Frame(master=chatwindow)
+    CreateChatFrame = tk.Frame( master = chatwindow )
 
-    def submit(chatname, uids):
+    def submit():
+        chatname = name.get().strip()
+        uids = [i.strip() for i in people.get().split(',')]
         Client.createforothers(chatname, uids)
         queryList.append(['create', chatname, uids])
-        CreateChatFrame.destroy
+        CreateChatFrame.destroy()
 
     name = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
-    chatname = name.get()
 
     people = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
-    people.insert(string="Enter UIDs of the people seperated by commas and in square brackets", index=0)
-    uids = people.get()
-    uids = uids.split(',')
-    uids.append(UID)
+    people.insert(string="Enter UIDs of the people (comma seperated)", index=0)
 
-    confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= submit(chatname, uids), fg="#008000")
+    confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= submit, fg="#008000")
     backBtn = tk.Button(master=CreateChatFrame, text="Cancel", font=("Calibri", 16), command = CreateChatFrame.destroy)
 
     CreateChatFrame.grid(rowspan = 3,column=1)
@@ -152,17 +150,18 @@ def createChatroom():
     backBtn.pack()
 
 def deleteChatroom():
-    def Delete(chatname):
-        Client.remove(chatname)
-        queryList.append('delete', chatname)
-        DeleteChatFrame.destroy
-    
     DeleteChatFrame = tk.Frame(master = chatwindow)
+
+    def Delete( ):
+        chatname = name.get().strip()
+        Client.remove(chatname)
+        queryList.append(['delete', chatname])
+        DeleteChatFrame.destroy()
+
     name = tk.Entry(master=DeleteChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
-    chatname = name.get()
 
-    confirmBtn = tk.Button(master=DeleteChatFrame, text="Submit", font=("Calibri", 16),command = Delete(chatname), fg="#008000")
+    confirmBtn = tk.Button(master=DeleteChatFrame, text="Submit", font=("Calibri", 16),command = Delete, fg="#008000")
     backBtn = tk.Button(master=DeleteChatFrame, text="Cancel", font=("Calibri", 16), command=DeleteChatFrame.destroy)
 
     DeleteChatFrame.grid(rowspan = 3,column=1)
@@ -171,30 +170,34 @@ def deleteChatroom():
     backBtn.pack()
 
 def editChatroom():
-    def Edit(chatname, UID_add):
-        Client.add(chatname, UID_add)
-        queryList.append('add', chatname, UID_add)
-        EditChatFrame.destroy
 
     EditChatFrame = tk.Frame(master=chatwindow)
 
+    def Edit():
+        chatname = name.get().strip()
+        UID_add = peopleadd.get().strip()
+        Client.add(chatname, UID_add)
+        queryList.append(['add', chatname, UID_add])
+        EditChatFrame.destroy()
+
     name = tk.Entry(master=EditChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
-    chatname = name.get()
 
-##    peoplermv = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width= 36)
-##    peoplermv.insert(string="Enter UIDs of the people you want to remove(type 0 for none)", index=0)
+    # peoplermv = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width= 36)
+    # peoplermv.insert(string="Enter UIDs of the people you want to remove(type 0 for none)", index=0)
 
     peopleadd = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width=36)
     peopleadd.insert(string="Enter UID of the person you want to add", index=0)
     UID_add = peopleadd.get() 
 
-    confirmBtn = tk.Button(master=EditChatFrame, text="Submit", font=("Calibri", 16), command=Edit(chatname, UID_add),fg="#008000")
+    confirmBtn = tk.Button(master=EditChatFrame, text="Submit", font=("Calibri", 16), command=Edit,fg="#008000")
     backBtn = tk.Button(master=EditChatFrame, text="Cancel", font=("Calibri", 16), command=EditChatFrame.destroy)
 
     EditChatFrame.grid(rowspan=3, column=1)
     name.pack(fill = tk.X)
-##    peoplermv.pack()
+
+    # peoplermv.pack()
+
     peopleadd.pack()
     confirmBtn.pack()
     backBtn.pack()
@@ -263,11 +266,10 @@ def chatMainWindow(chatname):
 def selectChatroom():
     global mainWindow, chatwindow
 
-
     chatwindow = getWindow("Chats", geometry="800x450")
     chatwindow.config(bg=backgroundDefault)
 
-    createBtn = tk.Button(master=chatwindow, text="Create new chatroom", font=("Calibri", 16), height=1, width=20,bg="#ffffff", command=createChatroom)
+    createBtn = tk.Button(master=chatwindow, text="Create chatroom", font=("Calibri", 16), height=1, width=20,bg="#ffffff", command=createChatroom)
     editBtn = tk.Button(master=chatwindow, text="Edit chatroom", font=("Calibri", 16), height=1, width=20, bg="#ffffff",command=editChatroom)
     deleteBtn = tk.Button(master=chatwindow, text="Delete chatroom", font=("Calibri", 16), height=1, width=20,bg="#ffffff", command=deleteChatroom)
     openBtn = tk.Button(master=chatwindow, text="Open chatroom", font=("Calibri", 16), height=1, width=20, bg="#ffffff",command=openChatroom)
