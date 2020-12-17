@@ -81,3 +81,47 @@ class memberManager:
     def __setitem__( self, key, value ):
         self.members[key] = value
         self.update()
+
+class chatroomManager:
+
+    def __init__( self ):
+        # Something comes here
+        pass
+
+    def addMemberTo( self, chatroom, UID ):
+        fil = open('chatroom__'+chatroom+'/People.txt', 'r')
+        members = [UID]
+        lines = fil.readlines()
+        for line in lines:
+            line = line[:-1]
+            members.append(line)
+        fil.close()
+        fil = open('chatroom__'+chatroom+'/People.txt', 'r')
+        for member in members:
+            fil.write(member + '\n')
+        fil.close()
+
+    def removeMemberFrom( self, chatroom, UID ):
+        fil = open('chatroom__'+chatroom+'/People.txt', 'r')
+        members = []
+        lines = fil.readlines()
+        for line in lines:
+            line = line[:-1]
+            if(line != UID): members.append(line)
+        fil.close()
+        fil = open('chatroom__'+chatroom+'/People.txt', 'r')
+        for member in members:
+            fil.write(member + '\n')
+        fil.close()
+
+    def addMsgTo( self, chatroom, message ):
+        chatroom = 'chatroom__' + chatroom
+        # DB code comes here
+
+    def deleteRoom( self, chatroom ):
+        chatroom = 'chatroom__' + chatroom
+        try:
+            for fil in os.listdir(chatroom): os.remove(chatroom + '/' + fil)
+            os.rmdir(chatroom)
+        except:
+            pass
