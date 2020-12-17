@@ -87,6 +87,7 @@ class chatroomManager:
         fil.close()
 
     def addMsgTo( self, chatroom, key, sender , msg ):
+        target = "chats"
         chatroom = 'chatroom__' + chatroom
         # This part of the code adds a msg (UID, timestamp, msg) to the DB of the correct chatroom
         name  =  chatroom + '/' + target + '.db'
@@ -101,6 +102,7 @@ class chatroomManager:
         conn.close()
 
     def getMsgsFrom( self, chatroom, n=50 ):
+        target = "chats"
         # n is number of last chats to get
         chatroom = 'chatroom__' + chatroom
         name  =  chatroom + '/' + target + '.db'
