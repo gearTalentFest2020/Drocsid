@@ -322,7 +322,11 @@ optionsFrame.grid( row = 1, column = 0 )
 Client.UID = UID
 while True:
     clientList = Client.recv()
-    for q in clientList: queryList.append(q)
+    queryList += clientList
+
+    for query in queryList:
+        print(query)
+
     try:
         mainWindow.update_idletasks()
         mainWindow.update()
