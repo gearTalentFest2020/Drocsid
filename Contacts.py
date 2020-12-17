@@ -56,8 +56,9 @@ class chatroomManager:
     target = "chats"
 
     def __init__( self ):
-        # Something comes here
-        pass
+        self.rooms = []
+        for i in os.listdir():
+            if i.startswith("chatroom__"): self.rooms.append(i[10::])
 
     def addMemberTo( self, chatroom, UID ):
         fil = open('chatroom__'+chatroom+'/People.txt', 'r')
@@ -113,6 +114,8 @@ class chatroomManager:
 
     def createRoom( self, name, members = [] ):
 
+        self.rooms.append( name )
+
         chatroom = 'chatroom__' + name
         try: os.mkdir( chatroom )
         except: pass
@@ -135,6 +138,7 @@ class chatroomManager:
         conn.close()
 
     def deleteRoom( self, chatroom ):
+        self.member.remove( chatroom )
         chatroom = 'chatroom__' + chatroom
         try:
             for fil in os.listdir(chatroom): os.remove(chatroom + '/' + fil)
@@ -152,3 +156,6 @@ class chatroomManager:
             members.append(line)
         fil.close()
         return members
+
+    def getRooms( self ):
+        return self.rooms

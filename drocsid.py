@@ -190,7 +190,7 @@ def editChatroom():
 
     peopleadd = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width=36)
     peopleadd.insert(string="Enter UID of the person you want to add", index=0)
-    UID_add = peopleadd.get() 
+    UID_add = peopleadd.get()
 
     confirmBtn = tk.Button(master=EditChatFrame, text="Submit", font=("Calibri", 16), command=Edit,fg="#008000")
     backBtn = tk.Button(master=EditChatFrame, text="Cancel", font=("Calibri", 16), command=EditChatFrame.destroy)
@@ -207,11 +207,7 @@ def editChatroom():
 def openChatroom():
     OpenChatFrame = tk.Frame(master = chatwindow)
 
-    l = os.listdir()
-    chatnames = []
-    for i in l:
-        if i.startswith("chatroom__"):
-            chatnames.append(i[10::])
+    chatnames = chatsManager.getRooms()
 
     for i in chatnames:
         btn = tk.Button(master = OpenChatFrame, text = i, font=("Calibri", 16), bg = "#ffffff", command = lambda i=i: chatMainWindow(i))
