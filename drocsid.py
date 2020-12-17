@@ -257,7 +257,7 @@ def chatMainWindow(chatname):
     timestamp = time.time()
     def sendButton(msg):
             Client.send(msg)
-            queryList.append('recv', chatname, timestamp, UID,  msg)
+            queryList.append(['recv', chatname, timestamp, UID,  msg])
     layout(chatname)
 
 def selectChatroom():
