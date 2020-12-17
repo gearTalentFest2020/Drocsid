@@ -225,7 +225,7 @@ def editChatroom():
         chatname = name.get().strip()
         UID_add = peopleadd.get().strip()
         Client.add(chatname, chatsManager.getMembersOf(chatname), UID_add)
-        queryList.append(['add', chatname, UID_add])
+        queryList.append(['addper', chatname, UID_add])
         EditChatFrame.destroy()
 
     def back():
@@ -414,7 +414,7 @@ while True:
             chatsManager.createRoom( query[1], query[2] )
         elif(query[0] == 'delete'):
             chatsManager.deleteRoom( query[1] )
-        elif(query[0] == 'add'):
+        elif(query[0] == 'addper'):
             chatsManager.addMemberTo( query[1], query[2] )
         elif(query[0] == 'remove'):
             try:
