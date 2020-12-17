@@ -8,6 +8,8 @@ import selectors
 from theme import *
 
 contacts = Contacts.contactsManager()
+chatsManager = Contacts.chatroomManager()
+chatsEnabled = False
 queryList = []
 
 # Wrapper around windows
@@ -280,7 +282,7 @@ def selectChatroom():
     deleteBtn.grid(row=2, column=0)
     openBtn.grid(row=3, column=0)
 
-    chatwindow.mainloop()
+    chatsEnabled = True
 
 print("-------------------------Starting App-------------------------")
 
@@ -318,11 +320,14 @@ optionsFrame.grid( row = 1, column = 0 )
 
 Client.UID = UID
 while True:
-    clientList = Client.recv()
-    queryList += clientList
+    queryList += Client.recv()
+
+    print('1')
+    print('2')
 
     for query in queryList:
         print(query)
+
     queryList = []
 
     try:
@@ -330,6 +335,13 @@ while True:
         mainWindow.update()
     except Exception as e:
         break
+
+    if chatsEnabled:
+        try:
+            chatswindow.update_idletasks()
+            chatswindow.update()
+        except:
+            chatsEnabled = False
 
 # saveContacts()
 contacts.saveAll( )
