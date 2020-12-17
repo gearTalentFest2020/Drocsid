@@ -415,7 +415,7 @@ while True:
         elif(query[0] == 'delete'):
             chatsManager.deleteRoom( query[1] )
         elif(query[0] == 'addper'):
-            chatsManager.addMemberTo( query[1], query[2] )
+            chatsManager.addMemberTo( query[2], query[1] )
         elif(query[0] == 'remove'):
             try:
                 chatsManager.removeMemberFrom( query[1], query[2] )
