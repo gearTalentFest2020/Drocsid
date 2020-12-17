@@ -417,7 +417,10 @@ while True:
         elif(query[0] == 'add'):
             chatsManager.addMemberTo( query[1], query[2] )
         elif(query[0] == 'remove'):
-            chatsManager.removeMemberFrom( query[1], query[2] )
+            try:
+                chatsManager.removeMemberFrom( query[1], query[2] )
+            except:
+                pass
         elif(query[0] == 'addmsg'):
             chatsManager.addMsgTo(query[1],query[2],query[3],query[4])
 
