@@ -48,7 +48,7 @@ def networking( ):
 
                     listener.sendto(msg.encode('utf8'), ip_table[key])
 
-                del query
+                req_table[key] = []
 
         events = socketManager.select(timeout = None)
         for(key, mask) in events:

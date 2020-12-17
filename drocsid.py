@@ -131,7 +131,7 @@ def createChatroom():
     people = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
     people.insert(string="Enter UIDs of the people you wish to chat with", index=0)
 
-    confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= lambda:Client.create(0,name.get()) or CreateChatFrame.destroy, fg="#008000")
+    confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= lambda:Client.create(name.get()) or CreateChatFrame.destroy, fg="#008000")
     backBtn = tk.Button(master=CreateChatFrame, text="Cancel", font=("Calibri", 16), command = CreateChatFrame.destroy)
 
     CreateChatFrame.grid(rowspan = 3,column=1)
