@@ -145,6 +145,7 @@ def add( chatroom, uids , targetUID):
         msg = sendPrefix + 'addper;' + str(uid) + ';' + str(chatroom) + ';' + str(targetUID)
         msg = msg.encode('utf-8')
         sock.sendto(msg, server)
+    createforothers(chatroom, targetUID)
 
 def stop():
     msg = sendPrefix + 'ofline'

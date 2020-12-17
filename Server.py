@@ -50,13 +50,8 @@ req_table = { }
 listener = socket.socket( family = socket.AF_INET, type = socket.SOCK_DGRAM )
 listener.bind(("", selfPort))
 
-client = ("106.201.123.139", selfPort) # Replace with your router public IP
-# print("punching")
-listener.sendto(b'', client)
-data, addr = listener.recvfrom(BUFSIZ)
-print(addr)
-listener.sendto(b'', client)
-# print("punched")
+whitelisted_ips = ["106.201.123.139", "106.200.238.248", "49.207.201.183", "49.37.170.237", "49.207.201.250"]
+
 
 listener.setblocking(False)
 
@@ -66,6 +61,8 @@ socketManager.register(listener, selectors.EVENT_READ, True)
 print('I am', (selfIp, selfPort))
 
 def networking( ):
+    for ip in whitelisted_ips:
+        listener.sendto(b'', (ip, selfPort))
     for key in req_table:
         if(not (ip_table.get(key, None) is None)):
             for query in req_table[key]:
@@ -73,13 +70,16 @@ def networking( ):
                 msg = query[0] + ';' + query[1] + ';'
                 if(query[0] == 'create'):
                     for UID in query[2]:
-                        msg += UID
+                        msg += UID + ';'
 
                 elif(query[0] == 'remove'):
                     msg += query[2]
 
-                if(query[0] == 'recv'):
+                elif(query[0] == 'recv'):
                     msg += query[2] + ';' + query[3] + ';'
+                  
+                elif(query[0] == 'addper'):
+                    msg += query[1] + ';' + query[2] + ';'
 
                 listener.sendto(msg.encode('utf8'), ip_table[key])
 
@@ -143,5 +143,15 @@ def networking( ):
             if(req_table.get(target, None) is None):
                 req_table[target] = []
             req_table[target].append(['recv', name, sender, data])
+
+        elif(query == 'addper'):
+
+            target = msg[2]
+            name = msg[3]
+            toAdd = msg[4]
+
+            if(req_table.get(target, None) is None):
+                req_table[target] = []
+            req_table[target].append(['addper', name, toAdd])
 
 while True: networking( )
