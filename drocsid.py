@@ -128,7 +128,7 @@ def altContact( ):
 
 def createChatroom():
     CreateChatFrame = tk.Frame( master = chatwindow )
-    
+
     createBtn['state'] = tk.DISABLED
     editBtn['state'] = tk.DISABLED
     deleteBtn['state'] = tk.DISABLED
@@ -139,10 +139,11 @@ def createChatroom():
         editBtn['state'] = tk.NORMAL
         deleteBtn['state'] = tk.NORMAL
         openBtn['state'] = tk.NORMAL
-        
+
         chatname = name.get().strip()
         uids = [i.strip() for i in people.get().split(',')]
         Client.createforothers(chatname, uids)
+        uids.append(Client.myUID)
         queryList.append(['create', chatname, uids])
         CreateChatFrame.destroy()
 
@@ -184,7 +185,7 @@ def deleteChatroom():
         openBtn['state'] = tk.NORMAL
 
         chatname = name.get().strip()
-        Client.remove(chatname)
+        Client.remove(chatname, chatsManager.getMembersOf(chatname))
         queryList.append(['delete', chatname])
         DeleteChatFrame.destroy()
 
