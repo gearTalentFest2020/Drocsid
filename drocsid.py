@@ -9,7 +9,6 @@ from theme import *
 
 contacts = Contacts.contactsManager()
 queryList = []
-#['create', nameofroom, ]
 
 # Wrapper around windows
 def getWindow( title, geometry ):
@@ -123,6 +122,8 @@ def altContact( ):
 
     altContactFrame.grid( row = 1, column = 1 , sticky = tk.E )
 
+# ---------------------------------------------------------------------------------------------------- #
+
 def createChatroom():
     CreateChatFrame = tk.Frame(master=chatwindow)
 
@@ -219,7 +220,7 @@ def chatMainWindow(chatname):
 
         Window.title("Drocsid")
         Window.configure(width = 450, height = 800, bg = "#17202A")
-        
+
         labelHead = tk.Label(Window, bg = "#17202A", fg = "#EAECEE", text = name , font = "Helvetica 13 bold", pady = 5)
         labelHead.place(relwidth = 1)
         line = tk.Label(Window, width = 450, bg = "#ABB2B9")
@@ -233,17 +234,17 @@ def chatMainWindow(chatname):
 
         global entryMsg
         entryMsg = tk.Entry(labelBottom, bg = "#2C3E50", fg = "#EAECEE", font = "Helvetica 13")
-         
+
         # place the given widget
         # into the gui window
         entryMsg.place(relwidth = 0.74,relheight = 0.06, rely = 0.008, relx = 0.011)
         entryMsg.focus()
-         
+
         # create a Send Button
         buttonMsg = tk.Button(labelBottom, text = "Send", font = "Helvetica 10 bold", width = 20, bg = "#ABB2B9", command = lambda :sendButton(entryMsg.get()))
         buttonMsg.place(relx = 0.77, rely = 0.008, relheight = 0.06, relwidth = 0.22)
         textCons.config(cursor = "arrow")
-         
+
         # create a scroll bar
         scrollbar = tk.Scrollbar(textCons)
         # place the scroll bar
@@ -279,14 +280,9 @@ def selectChatroom():
 
     chatwindow.mainloop()
 
-def chatWindow():
-    pass
-    
-
 print("-------------------------Starting App-------------------------")
 
 # Loading contacts
-global UID
 UID = contacts.loadAll( ) #Print it
 
 # Creating window
@@ -300,7 +296,6 @@ optionsFrame = tk.Frame( mainWindow )
 selectChatroomFrame = tk.Frame( mainWindow )
 
 Title = tk.Label(master = mainWindow, text= "DROCSID", font = ("Calibri", 30),bg = backgroundDefault, fg = "#ffffff")
-
 
 addContactBtn = tk.Button( master = optionsFrame, text = "Add Contact", font = ("Calibri", 20), command = addContact, bg = btnDefault, fg = btnTxtDefault )
 remContactBtn = tk.Button( master = optionsFrame, text = "Remove Contact", font = ("Calibri", 20), command = remContact, bg = btnDefault, fg = btnTxtDefault )
@@ -326,6 +321,7 @@ while True:
 
     for query in queryList:
         print(query)
+    queryList = []
 
     try:
         mainWindow.update_idletasks()
