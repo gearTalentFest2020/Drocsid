@@ -325,6 +325,10 @@ while True:
             chatsManager.deleteRoom( query[1] )
         elif(query[0] == 'add'):
             chatsManager.addMemberTo( query[1], query[2] )
+        elif(query[0] == 'remove'):
+            chatsManager.removeMemberFrom( query[1], query[2] )
+        elif(query[0] == 'addmsg'):
+            pass
 
     queryList = []
 
