@@ -67,7 +67,7 @@ class chatroomManager:
             line = line[:-1]
             members.append(line)
         fil.close()
-        fil = open('chatroom__'+chatroom+'/People.txt', 'r')
+        fil = open('chatroom__'+chatroom+'/People.txt', 'w')
         for member in members:
             fil.write(member + '\n')
         fil.close()
@@ -80,14 +80,13 @@ class chatroomManager:
             line = line[:-1]
             if(line != UID): members.append(line)
         fil.close()
-        fil = open('chatroom__'+chatroom+'/People.txt', 'r')
+        fil = open('chatroom__'+chatroom+'/People.txt', 'w')
         for member in members:
             fil.write(member + '\n')
         fil.close()
 
     def addMsgTo( self, chatroom, key, sender , msg ):
         chatroom = 'chatroom__' + chatroom
-        # DB code comes here
         # This part of the code adds a msg (UID, timestamp, msg) to the DB of the correct chatroom
         name  =  chatroom + '/' + target + '.db'
         conn  =  sqlite3.connect( name )
@@ -112,14 +111,17 @@ class chatroomManager:
         conn.close()
         return l[-1:-n-1:-1][::-1]
 
-    def createRoom( self, name ):
+    def createRoom( self, name, members = [] ):
 
         chatroom = 'chatroom__' + name
-        try: os.mkdir( name )
+        try: os.mkdir( chatroom )
         except: pass
 
-        open(name + '/People.txt', 'w') if(not os.path.exists(name + '/People.txt')) else None
+        open(chatroom + '/People.txt', 'w') if(not os.path.exists(chatroom + '/People.txt')) else None
+        for member in members:
+            self.addMemberTo(name, member)
 
+        target = 'chats'
         name  =  chatroom + '/' + target + '.db'
         conn  =  sqlite3.connect( name )
         c = conn.cursor()
@@ -129,7 +131,6 @@ class chatroomManager:
             conn.commit()
 
         except Exception as e:
-            # print(e)
             pass
         conn.close()
 

@@ -322,11 +322,14 @@ Client.UID = UID
 while True:
     queryList += Client.recv()
 
-    print('1')
-    print('2')
-
     for query in queryList:
         print(query)
+        if(query[0] == 'create'):
+            chatsManager.createRoom( query[1], query[2] )
+        elif(query[0] == 'delete'):
+            chatsManager.deleteRoom( query[1] )
+        elif(query[0] == 'add'):
+            pass
 
     queryList = []
 
