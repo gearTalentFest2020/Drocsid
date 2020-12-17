@@ -135,10 +135,9 @@ def createforothers( chatroom, uids , target = None):
             msg = msg.encode('utf-8')
             sock.sendto(msg, server)
     else:
-        for uid in uids:
-            msg = sendPrefix + 'create;' + str(target) + ';' + str(chatroom) + ';' + ';'.join(uids)
-            msg = msg.encode('utf-8')
-            sock.sendto(msg, server)
+        msg = sendPrefix + 'create;' + str(target) + ';' + str(chatroom) + ';' + ';'.join(uids)
+        msg = msg.encode('utf-8')
+        sock.sendto(msg, server)
 
 def remove( chatroom, uids ):
     for uid in uids:
