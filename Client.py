@@ -58,6 +58,7 @@ def send( msg = '', timestamp=None ):
         sock.sendto(msg, server)  # sends message
 
 def recv():
+    queryList = []
     events = socketManager.select( timeout = 0.01 )
     for (key, mask) in events:
         data, addr = sock.recvfrom(BUFSIZ)
@@ -67,6 +68,7 @@ def recv():
         if data:
 
             tokens = data.split(';')
+            queryList.append(tokens)
 
             if(tokens[0] == 'recv'):
                 name = "chatroom__" + tokens[1]
@@ -107,6 +109,7 @@ def recv():
                     f.write(member + '\n')
                 f.close()
                 print(members)
+    return queryList
 
 def create():
     m = sendPrefix + 'create;'
