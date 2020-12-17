@@ -372,7 +372,8 @@ print("-------------------------Starting App-------------------------")
 
 # Loading contacts
 UID = contacts.loadAll( ) #Print it
-
+Client.myUID = UID
+Client.connect()
 # Creating window
 mainWindow = getWindow("Drocsid","800x450")
 mainWindow.configure( bg = backgroundDefault )
@@ -402,7 +403,7 @@ altContactBtn.pack()
 selRoomBtn.pack()
 optionsFrame.grid( row = 1, column = 0 )
 
-Client.UID = UID
+
 while True:
     queryList += Client.recv()
 
@@ -436,5 +437,5 @@ while True:
 
 # saveContacts()
 contacts.saveAll( )
-
+Client.stop()
 print("-------------------------Closing App-------------------------")
