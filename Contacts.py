@@ -138,7 +138,7 @@ class chatroomManager:
         conn.close()
 
     def deleteRoom( self, chatroom ):
-        self.member.remove( chatroom )
+        self.rooms.remove( chatroom )
         chatroom = 'chatroom__' + chatroom
         try:
             for fil in os.listdir(chatroom): os.remove(chatroom + '/' + fil)
