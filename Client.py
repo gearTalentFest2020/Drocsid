@@ -98,8 +98,8 @@ def recv( ):
             if(tokens[0] == 'recv'):
                 name = tokens[1]
                 sender = tokens[2]
-                msg = tokens[3].split(';')[1]
-                timestamp = tokens[3].split(';')[0]
+                msg = tokens[4:]
+                timestamp = tokens[3]
                 query.append('addmsg')
                 query.append(name)
                 query.append(timestamp)
@@ -108,7 +108,7 @@ def recv( ):
 
             elif(tokens[0] == 'create'):
                 name = tokens[1]
-                members = tokens[2:].split(';')
+                members = tokens[2:]
                 query.append('create')
                 query.append(name)
                 query.append(members)
