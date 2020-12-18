@@ -1,16 +1,12 @@
 import tkinter as tk
-import sys, os, socket
-import Contacts
-import Client
-import time
-import selectors
+import sys, os, socket, time
+import Contacts, Client
 
 from theme import *
 
 contacts = Contacts.contactsManager()
 chatsManager = Contacts.chatroomManager()
 chatsEnabled = False
-currentlyOpenChat = ''
 queryList = []
 
 # Wrapper around windows
@@ -262,7 +258,7 @@ def openChatroom():
     backBtn.pack(fill = tk.X)
 
 def chatMainWindow(chatname):
-    Window = tk.Tk()
+    Window = getWindow("Drocsid", "450x800")
 
     createBtn['state'] = tk.NORMAL
     editBtn['state'] = tk.NORMAL
@@ -273,15 +269,13 @@ def chatMainWindow(chatname):
 
     def layout(name):
 
-        Window.title("Drocsid")
-        Window.configure(width = 450, height = 800, bg = "#17202A")
+        Window.configure( bg = "#17202A" )
 
         labelHead = tk.Label(Window, bg = "#17202A", fg = "#EAECEE", text = name , font = "Helvetica 13 bold", pady = 5)
         labelHead.place(relwidth = 1)
         line = tk.Label(Window, width = 450, bg = "#ABB2B9")
         line.place(relwidth = 1, rely = 0.07, relheight = 0.012)
 
-        # tup_msgs = [("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye"),("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye"),("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye")]
         tup_msgs = chatsManager.getMsgsFrom(chatname)
         msg = ""
         for i in tup_msgs:
@@ -369,7 +363,7 @@ selectChatroomFrame = tk.Frame( mainWindow )
 
 Title = tk.Label(master = mainWindow, text= "DROCSID", font = ("Calibri", 30),bg = backgroundDefault, fg = "#ffffff")
 
-addContactBtn = tk.Button( master = optionsFrame, text = "Add Contact", font = ("Calibri", 20), command = addContact, bg = btnDefault, fg = btnTxtDefault )
+addContactBtn = tk.Button( master = optionsFrame, text = "Add Contact", font = ("Consolas", 20), command = addContact, bg = btnDefault, fg = btnTxtDefault )
 remContactBtn = tk.Button( master = optionsFrame, text = "Remove Contact", font = ("Calibri", 20), command = remContact, bg = btnDefault, fg = btnTxtDefault )
 altContactBtn = tk.Button( master = optionsFrame, text = "Edit Contact", font = ("Calibri", 20), command = altContact, bg = btnDefault, fg = btnTxtDefault )
 selRoomBtn = tk.Button( master = optionsFrame, text = "Chats", font = ("Calibri", 20), command = selectChatroom, bg = btnDefault, fg = btnTxtDefault )
@@ -401,7 +395,7 @@ while True:
         elif(query[0] == 'remove'):
             chatsManager.removeMemberFrom( query[1], query[2] )
         elif(query[0] == 'addmsg'):
-            chatsManager.addMsgTo(query[1],query[2],query[3],query[4])
+            chatsManager.addMsgTo( query[1],query[2],query[3],query[4] )
 
     queryList = []
 
@@ -418,7 +412,6 @@ while True:
         except:
             chatsEnabled = False
 
-# saveContacts()
 contacts.saveAll( )
 Client.stop()
 
