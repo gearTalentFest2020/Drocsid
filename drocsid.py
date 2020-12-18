@@ -35,7 +35,7 @@ def addContact( ):
     ID = tk.Entry( master = addContactFrame, font = ("Calibri", 16))
     ID.insert(string = "Enter contact's ID", index = 0)
 
-    confirmBtn = tk.Button( master = addContactFrame, text = "Submit", font = ("Calibri", 16), command = lambda : contacts.addContact(ID.get().strip(), name.get().strip()) and back(), fg = "#008000")
+    confirmBtn = tk.Button( master = addContactFrame, text = "Submit", font = ("Calibri", 16), command = lambda : contacts.addContact(ID.get().strip(), name.get().strip()) or back(), fg = "#008000")
     backBtn = tk.Button(master = addContactFrame, text = "Cancel", font = ("Calibri", 16), command = back)
 
     name.pack()
@@ -320,9 +320,6 @@ def chatMainWindow(chatname):
         timestamp = time.time()
         Client.send(chatname,chatsManager.getMembersOf(chatname),timestamp,msg)
         queryList.append(['recv', chatname, timestamp, Client.myUID,  msg])
-
-    def printMsg():
-        textCons.insert(0,msg)
 
     layout(chatname)
 
