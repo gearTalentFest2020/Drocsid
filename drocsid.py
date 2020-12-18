@@ -297,7 +297,8 @@ def chatMainWindow(chatname):
         line = tk.Label(Window, width = 450, bg = "#ABB2B9")
         line.place(relwidth = 1, rely = 0.07, relheight = 0.012)
 
-        tup_msgs = [("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye"),("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye"),("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye")]
+        # tup_msgs = [("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye"),("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye"),("12:00", "Chow", "Hello"), ("12:01", "Vyoman", "Hi"), ("12:02", "Aryan", "Bye"), ("12:03", "Agarwal", "Goodbye")]
+        tup_msgs = chatsManager.getMsgsFrom(chatname)
         msg = ""
         for i in tup_msgs:
             msg += i[0] + "\t" + i[1] + "\n" + i[2]+"\n\n"
@@ -340,7 +341,7 @@ def chatMainWindow(chatname):
         queryList.append(['recv', chatname, timestamp, UID,  msg])
 
     def printMsg():
-        textCons.insert(0,chatmsg)
+        textCons.insert(0,msg)
 
 
 
