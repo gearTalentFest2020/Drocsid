@@ -119,10 +119,10 @@ def createChatroom():
         openBtn['state'] = tk.NORMAL
 
         chatname = name.get().strip()
-        uids = [i.strip() for i in people.get().split(',')]
-        Client.createforothers(chatname, uids)
-        uids.append(Client.myUID)
-        queryList.append(['create', chatname, uids])
+        Client.myUIDs = [i.strip() for i in people.get().split(',')]
+        Client.createforothers(chatname, Client.myUIDs)
+        Client.myUIDs.append(Client.myUID)
+        queryList.append(['create', chatname, Client.myUIDs])
         CreateChatFrame.destroy()
 
     def back():
@@ -137,7 +137,7 @@ def createChatroom():
     name.insert(string="Enter Chatroom name", index=0)
 
     people = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
-    people.insert(string="Enter UIDs of the people (comma seperated)", index=0)
+    people.insert(string="Enter Client.myUIDs of the people (comma seperated)", index=0)
 
     confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= submit, fg="#008000")
     backBtn = tk.Button(master=CreateChatFrame, text="Cancel", font=("Calibri", 16), command = back)
@@ -202,9 +202,9 @@ def editChatroom():
         openBtn['state'] = tk.NORMAL
 
         chatname = name.get().strip()
-        UID_add = peopleadd.get().strip()
-        Client.add(chatname, chatsManager.getMembersOf(chatname), UID_add)
-        queryList.append(['addper', chatname, UID_add])
+        Client.myUID_add = peopleadd.get().strip()
+        Client.add(chatname, chatsManager.getMembersOf(chatname), Client.myUID_add)
+        queryList.append(['addper', chatname, Client.myUID_add])
         EditChatFrame.destroy()
 
     def back():
@@ -218,7 +218,7 @@ def editChatroom():
     name.insert(string="Enter Chatroom name", index=0)
 
     peopleadd = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width=36)
-    peopleadd.insert(string="Enter UID of the person you want to add", index=0)
+    peopleadd.insert(string="Enter Client.myUID of the person you want to add", index=0)
 
 
     confirmBtn = tk.Button(master=EditChatFrame, text="Submit", font=("Calibri", 16), command=Edit,fg="#008000")
@@ -319,7 +319,7 @@ def chatMainWindow(chatname):
         msg = entryMsg.get()
         timestamp = time.time()
         Client.send(chatname,chatsManager.getMembersOf(chatname),timestamp,msg)
-        queryList.append(['recv', chatname, timestamp, UID,  msg])
+        queryList.append(['recv', chatname, timestamp, Client.myUID,  msg])
 
     def printMsg():
         textCons.insert(0,msg)
