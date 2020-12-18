@@ -50,7 +50,7 @@ req_table = { }
 listener = socket.socket( family = socket.AF_INET, type = socket.SOCK_DGRAM )
 listener.bind(("", selfPort))
 
-whitelisted_ips = ["106.201.123.139", "106.200.238.248", "49.207.201.183", "49.37.170.237", "49.207.201.250"]
+whitelisted_ips = ["106.201.123.139", "106.200.238.248", "49.207.201.183", "49.37.170.237", "49.207.201.250", "171.61.90.0", "49.207.223.177"]
 
 
 listener.setblocking(False)
@@ -71,15 +71,16 @@ def networking( ):
                 if(query[0] == 'create'):
                     for UID in query[2]:
                         msg += UID + ';'
+                    msg = msg[:-1:]
 
                 elif(query[0] == 'remove'):
                     msg += query[2]
 
                 elif(query[0] == 'recv'):
-                    msg += query[2] + ';' + query[3] + ';'
-                  
+                    msg += query[2] + ';' + query[3]
+
                 elif(query[0] == 'addper'):
-                    msg += query[1] + ';' + query[2] + ';'
+                    msg += query[2]
 
                 listener.sendto(msg.encode('utf8'), ip_table[key])
 
