@@ -100,37 +100,29 @@ def recv( ):
             if(tokens[0] == 'recv'):
                 name = tokens[1]
                 sender = tokens[2]
-                msg = ";".join(tokens[4:])
                 timestamp = tokens[3]
-                query.append('addmsg')
-                query.append(name)
-                query.append(timestamp)
-                query.append(sender)
-                query.append(msg)
+                msg = ";".join(tokens[4:])
+                query += ['addmsg', name, timestamp, sender, msg]
 
             elif(tokens[0] == 'create'):
                 name = tokens[1]
                 members = tokens[2:]
-                query.append('create')
-                query.append(name)
-                query.append(members)
+                query += ['create', name, members]
 
             elif(tokens[0] == 'remove'):
                 name = tokens[1]
                 sender = tokens[2]
-                query.append('remove')
-                query.append(name)
-                query.append(sender)
+                query += ['remove', name, sender]
 
             elif(tokens[0] == 'addper'):
-                query.append('addper')
-                query.append(tokens[1])
-                query.append(tokens[2])
+                name = tokens[1]
+                toAdd = tokens[2]
+                query += ['addper', tokens[1], tokens[2]]
 
             queryList.append(query)
     return queryList
 
-def createforothers( chatroom, uids , target = None):
+def createforothers( chatroom, uids , target = None ):
     if target is None:
         for uid in uids:
             msg = sendPrefix + 'create;' + str(uid) + ';' + str(chatroom) + ';' + ';'.join(uids)

@@ -2,9 +2,6 @@ import os, sys, json
 import socket, time, sqlite3
 from baseChange import *
 
-import hashlib
-# import Client
-
 class contactsManager:
 
     def __init__( self ):
@@ -22,8 +19,8 @@ class contactsManager:
         self.UID = lines[0]
 
         for line in lines[1:]:
+            line = line[:-1]
             tokens = line.split(';')
-            tokens[1] = tokens[1][:-1]
             assert len(tokens)==2, "Corrupted Contacts File"
             self.contacts.setdefault(tokens[0], tokens[1])
         contacts_file.close()
@@ -53,63 +50,65 @@ class contactsManager:
         return self.contacts.get(key, key)
 
 class chatroomManager:
-    target = "chats"
 
     def __init__( self ):
         self.rooms = []
-        for i in os.listdir():
-            if i.startswith("chatroom__"): self.rooms.append(i[10::])
+        for entry in os.listdir():
+            if entry.startswith("chatroom__"): self.rooms.append(entry[10::])
 
-    def addMemberTo( self, chatroom, UID ):
-        fil = open('chatroom__'+chatroom+'/People.txt', 'r')
+    def addMemberTo( self, name, UID ):
+
+        chatroom = 'chatroom__' + name
         members = [UID]
+
+        fil = open(chatroom+'/People.txt', 'r')
         lines = fil.readlines()
-        for line in lines:
-            line = line[:-1]
-            members.append(line)
-        fil.close()
-        fil = open('chatroom__'+chatroom+'/People.txt', 'w')
-        for member in members:
-            fil.write(member + '\n')
+        for line in lines: members.append(line[:-1])
         fil.close()
 
-    def removeMemberFrom( self, chatroom, UID ):
-        fil = open('chatroom__'+chatroom+'/People.txt', 'r')
+        fil = open(chatroom+'/People.txt', 'w')
+        for member in members: fil.write(member + '\n')
+        fil.close()
+
+    def removeMemberFrom( self, name, toRem ):
+
+        chatroom = 'chatroom__' + name
+        fil = open(chatroom+'/People.txt', 'r')
         members = []
         lines = fil.readlines()
+
         for line in lines:
             line = line[:-1]
-            if(line != UID): members.append(line)
-        fil.close()
-        fil = open('chatroom__'+chatroom+'/People.txt', 'w')
-        for member in members:
-            fil.write(member + '\n')
+            if(line != toRem): members.append(line)
         fil.close()
 
-    def addMsgTo( self, chatroom, key, sender , msg ):
-        target = "chats"
-        chatroom = 'chatroom__' + chatroom
+        fil = open(chatroom+'/People.txt', 'w')
+        for member in members: fil.write(member + '\n')
+        fil.close()
+
+    def addMsgTo( self, name, key, sender , msg ):
+        chatroom = 'chatroom__' + name
         # This part of the code adds a msg (UID, timestamp, msg) to the DB of the correct chatroom
-        name  =  chatroom + '/' + target + '.db'
+        name  =  chatroom + '/chats.db'
         conn  =  sqlite3.connect( name )
         c = conn.cursor()
         try:
-            ## Save string at new key location
             c.execute( '''INSERT INTO chat (time, sender, msg) VALUES (?,?,?)''', ( key, sender, msg ) )
             conn.commit()
         except Exception as e:
             pass
         conn.close()
 
-    def getMsgsFrom( self, chatroom, n=50 ):
-        target = "chats"
-        # n is number of last chats to get
-        chatroom = 'chatroom__' + chatroom
-        name  =  chatroom + '/' + target + '.db'
+    def getMsgsFrom( self, name, n = 64 ):
+
+        chatroom = 'chatroom__' + name
+        name  =  chatroom + '/chats.db'
         conn  =  sqlite3.connect( name )
+
         c = conn.cursor()
         c.execute('''SELECT time, sender, msg FROM chat''')
         l = c.fetchall()
+
         conn.commit()
         conn.close()
         return l[-1:-n-1:-1][::-1]
@@ -126,17 +125,15 @@ class chatroomManager:
         for member in members:
             self.addMemberTo(name, member)
 
-        target = 'chats'
-        name  =  chatroom + '/' + target + '.db'
+        name  =  chatroom + '/chats.db'
         conn  =  sqlite3.connect( name )
         c = conn.cursor()
         try:
-            ## Create Table
             c.execute( '''CREATE TABLE chat(time REAL NOT NULL PRIMARY KEY, sender TEXT, msg TEXT)''' )
             conn.commit()
-
         except Exception as e:
             pass
+
         conn.close()
 
     def deleteRoom( self, chatroom ):
@@ -154,8 +151,7 @@ class chatroomManager:
         members = []
         lines = fil.readlines()
         for line in lines:
-            line = line[:-1]
-            members.append(line)
+            members.append(line[:-1])
         fil.close()
         return members
 

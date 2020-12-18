@@ -23,13 +23,7 @@ def getWindow( title, geometry ):
 # Function to add a contact
 def addContact( ):
 
-    def Close_Add():
-        contacts.addContact(ID.get(), name.get())
-        addContactFrame.destroy()
-        remContactBtn["state"] = tk.NORMAL
-        altContactBtn["state"] = tk.NORMAL
-
-    def Back_Add():
+    def back():
         addContactFrame.destroy()
         remContactBtn["state"] = tk.NORMAL
         altContactBtn["state"] = tk.NORMAL
@@ -45,8 +39,8 @@ def addContact( ):
     ID = tk.Entry( master = addContactFrame, font = ("Calibri", 16))
     ID.insert(string = "Enter contact's ID", index = 0)
 
-    confirmBtn = tk.Button( master = addContactFrame, text = "Submit", font = ("Calibri", 16), command = Close_Add, fg = "#008000")
-    backBtn = tk.Button(master = addContactFrame, text = "Cancel", font = ("Calibri", 16), command = Back_Add)
+    confirmBtn = tk.Button( master = addContactFrame, text = "Submit", font = ("Calibri", 16), command = lambda : contacts.addContact(ID.get().strip(), name.get().strip()) and back(), fg = "#008000")
+    backBtn = tk.Button(master = addContactFrame, text = "Cancel", font = ("Calibri", 16), command = back)
 
     name.pack()
     ID.pack()
@@ -58,13 +52,7 @@ def addContact( ):
 # Function to remove a contact
 def remContact( ):
 
-    def Close_Rem():
-        contacts.remContact(ID.get())
-        remContactFrame.destroy()
-        addContactBtn["state"] = tk.NORMAL
-        altContactBtn["state"] = tk.NORMAL
-
-    def Back_Rem():
+    def back():
         remContactFrame.destroy()
         addContactBtn["state"] = tk.NORMAL
         altContactBtn["state"] = tk.NORMAL
@@ -77,8 +65,8 @@ def remContact( ):
     ID = tk.Entry( master = remContactFrame, font = ("Calibri", 16))
     ID.insert(string = "Enter contact's ID", index = 0)
 
-    confirmBtn = tk.Button( master = remContactFrame, text = "Remove", font = ("Calibri", 16), command = Close_Rem, fg = "#008000")
-    backBtn = tk.Button(master = remContactFrame, text = "Cancel", font = ("Calibri", 16), command = Back_Rem)
+    confirmBtn = tk.Button( master = remContactFrame, text = "Remove", font = ("Calibri", 16), command = lambda : contacts.remContact(ID.get()) and back(), fg = "#008000")
+    backBtn = tk.Button(master = remContactFrame, text = "Cancel", font = ("Calibri", 16), command = back)
 
     ID.pack()
 
@@ -90,13 +78,7 @@ def remContact( ):
 # Function to alter a contact
 def altContact( ):
 
-    def Close_Alt():
-        contacts.altContact(ID.get(), name.get())
-        altContactFrame.destroy()
-        addContactBtn["state"] = tk.NORMAL
-        remContactBtn["state"] = tk.NORMAL
-
-    def Back_Alt():
+    def back():
         altContactFrame.destroy()
         addContactBtn["state"] = tk.NORMAL
         remContactBtn["state"] = tk.NORMAL
@@ -112,9 +94,8 @@ def altContact( ):
     name = tk.Entry( master = altContactFrame, font = ("Calibri", 16))
 
     confirmBtn1 = tk.Button( master = altContactFrame, text = "Edit", font = ("Calibri", 16), command = lambda : name.insert(string = contacts[ID.get().strip()], index = 0), fg = "#008000")
-    confirmBtn2 = tk.Button( master = altContactFrame, text = "Submit", font = ("Calibri", 16), command = Close_Alt, fg = "#008000")
-    backBtn = tk.Button(master = altContactFrame, text = "Cancel", font = ("Calibri", 16), command = Back_Alt)
-
+    confirmBtn2 = tk.Button( master = altContactFrame, text = "Submit", font = ("Calibri", 16), command = lambda : contacts.altContact(ID.get(), name.get()) and back(), fg = "#008000")
+    backBtn = tk.Button(master = altContactFrame, text = "Cancel", font = ("Calibri", 16), command = back)
 
     ID.pack()
     name.pack()
@@ -210,7 +191,7 @@ def deleteChatroom():
 
 def editChatroom():
     EditChatFrame = tk.Frame(master=chatwindow)
-    
+
     createBtn['state'] = tk.DISABLED
     editBtn['state'] = tk.DISABLED
     deleteBtn['state'] = tk.DISABLED
@@ -255,7 +236,7 @@ def editChatroom():
 
 def openChatroom():
     OpenChatFrame = tk.Frame(master = chatwindow)
-    
+
     createBtn['state'] = tk.DISABLED
     editBtn['state'] = tk.DISABLED
     deleteBtn['state'] = tk.DISABLED
@@ -348,10 +329,6 @@ def chatMainWindow(chatname):
     def printMsg():
         textCons.insert(0,msg)
 
-
-
-
-
     layout(chatname)
 
 def selectChatroom():
@@ -378,11 +355,11 @@ def selectChatroom():
 print("-------------------------Starting App-------------------------")
 
 # Loading contacts
-UID = contacts.loadAll( ) #Print it
-Client.myUID = UID
+Client.myUID = contacts.loadAll( ) #Print it
 Client.connect()
+
 # Creating window
-mainWindow = getWindow("Drocsid","800x450")
+mainWindow = getWindow( "Drocsid","800x450" )
 mainWindow.configure( bg = backgroundDefault )
 
 # This is the part of the screen where you can click to add, remove, alter contacts and chatrooms
@@ -410,12 +387,12 @@ altContactBtn.pack()
 selRoomBtn.pack()
 optionsFrame.grid( row = 1, column = 0 )
 
-
 while True:
     queryList += Client.recv()
 
     for query in queryList:
         print(query)
+        name = query[1]
         if(query[0] == 'create'):
             chatsManager.createRoom( query[1], query[2] )
         elif(query[0] == 'delete'):
@@ -423,10 +400,9 @@ while True:
         elif(query[0] == 'addper'):
             chatsManager.addMemberTo( query[1], query[2] )
         elif(query[0] == 'remove'):
-            try:
-                chatsManager.removeMemberFrom( query[1], query[2] )
-            except:
-                pass
+            # ! The problem is that the server tells you to delete yourself as well and it wont be able to
+            try: chatsManager.removeMemberFrom( query[1], query[2] )
+            except: pass
         elif(query[0] == 'addmsg'):
             chatsManager.addMsgTo(query[1],query[2],query[3],query[4])
 
@@ -448,4 +424,5 @@ while True:
 # saveContacts()
 contacts.saveAll( )
 Client.stop()
+
 print("-------------------------Closing App-------------------------")
