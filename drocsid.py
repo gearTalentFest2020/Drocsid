@@ -10,6 +10,7 @@ from theme import *
 contacts = Contacts.contactsManager()
 chatsManager = Contacts.chatroomManager()
 chatsEnabled = False
+currentlyOpenChat = ''
 queryList = []
 
 # Wrapper around windows
@@ -286,6 +287,7 @@ def chatMainWindow(chatname):
     deleteBtn['state'] = tk.NORMAL
     openBtn['state'] = tk.NORMAL
 
+    currentlyOpenChat = chatname
 
     def layout(name):
 
@@ -326,10 +328,13 @@ def chatMainWindow(chatname):
         buttonMsg.place(relx = 0.77, rely = 0.008, relheight = 0.06, relwidth = 0.22)
         textCons.config(cursor = "arrow")
 
+        reloadButton = tk.Button(labelBottom, text="Reload", font = "Helvetica 10 bold", width = 20, bg = "#ABB2B9", command = lambda : chatMainWindow(chatname) or Window.destroy())
+
         # create a scroll bar
         scrollbar = tk.Scrollbar(textCons)
         # place the scroll bar into the GUI window
         scrollbar.place(relheight = 1, relx = 0.974)
+        reloadButton.place(rely = 0.05, relx = 0.011)
         scrollbar.config(command = textCons.yview)
         textCons.config(state = tk.DISABLED)
 
@@ -355,7 +360,7 @@ def selectChatroom():
 
     chatwindow = getWindow("Chats", geometry="800x450")
     chatwindow.config(bg=backgroundDefault)
-    
+
 
     createBtn = tk.Button(master=chatwindow, text="Create chatroom", font=("Calibri", 16), height=1, width=20,bg="#ffffff", command=createChatroom)
     editBtn = tk.Button(master=chatwindow, text="Edit chatroom", font=("Calibri", 16), height=1, width=20, bg="#ffffff",command=editChatroom)
