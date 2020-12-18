@@ -279,7 +279,7 @@ def chatMainWindow(chatname):
         tup_msgs = chatsManager.getMsgsFrom(chatname)
         msg = ""
         for i in tup_msgs:
-            msg += str(i[0]) + "\t" + i[1] + "\n" + i[2]+"\n\n"
+            msg += str(i[0]) + "\t" + contacts[i[1]] + "\n" + i[2]+"\n\n"
         print(msg)
 
 
