@@ -52,7 +52,6 @@ listener.bind(("", selfPort))
 
 whitelisted_ips = ["106.201.123.139", "106.200.238.248", "49.207.201.183", "49.37.170.237", "49.207.201.250", "171.61.90.0", "49.207.223.177"]
 
-
 listener.setblocking(False)
 
 socketManager = selectors.DefaultSelector()
@@ -114,8 +113,7 @@ def networking( ):
             UIDs = [sender]
             for UID in msg[4:]: UIDs.append(UID)
 
-            if(req_table.get(target, None) is None):
-                req_table[target] = []
+            if(req_table.get(target, None) is None): req_table[target] = []
             req_table[target].append(['create', name, UIDs])
 
         # Remove a person from the chatroom of other people
@@ -124,8 +122,7 @@ def networking( ):
             target = msg[2]
             name = msg[3]
 
-            if(req_table.get(target, None) is None):
-                req_table[target] = []
+            if(req_table.get(target, None) is None): req_table[target] = []
             req_table[target].append(['remove', name, sender])
 
         # Send a message to a person on a particular chatroom
@@ -134,15 +131,12 @@ def networking( ):
             target = msg[2]
             name = msg[3]
 
-            # data = msg[4]
-
             data = msg[4:]
             temp = ''
             for elem in data: temp += elem + ';'
             data = temp[:-1]
 
-            if(req_table.get(target, None) is None):
-                req_table[target] = []
+            if(req_table.get(target, None) is None): req_table[target] = []
             req_table[target].append(['recv', name, sender, data])
 
         elif(query == 'addper'):
@@ -151,8 +145,7 @@ def networking( ):
             name = msg[3]
             toAdd = msg[4]
 
-            if(req_table.get(target, None) is None):
-                req_table[target] = []
+            if(req_table.get(target, None) is None): req_table[target] = []
             req_table[target].append(['addper', name, toAdd])
 
 while True: networking( )

@@ -167,7 +167,9 @@ def deleteChatroom():
         openBtn['state'] = tk.NORMAL
 
         chatname = name.get().strip()
-        Client.remove(chatname, chatsManager.getMembersOf(chatname))
+        members = chatsManager.getMembersOf(chatname)
+        members.remove(Client.myUID)
+        Client.remove(chatname, members)
         queryList.append(['delete', chatname])
         DeleteChatFrame.destroy()
 
@@ -196,7 +198,6 @@ def editChatroom():
     editBtn['state'] = tk.DISABLED
     deleteBtn['state'] = tk.DISABLED
     openBtn['state'] = tk.DISABLED
-
 
     def Edit():
         createBtn['state'] = tk.NORMAL
@@ -338,12 +339,10 @@ def selectChatroom():
     chatwindow = getWindow("Chats", geometry="800x450")
     chatwindow.config(bg=backgroundDefault)
 
-
     createBtn = tk.Button(master=chatwindow, text="Create chatroom", font=("Calibri", 16), height=1, width=20,bg="#ffffff", command=createChatroom)
     editBtn = tk.Button(master=chatwindow, text="Edit chatroom", font=("Calibri", 16), height=1, width=20, bg="#ffffff",command=editChatroom)
     deleteBtn = tk.Button(master=chatwindow, text="Delete chatroom", font=("Calibri", 16), height=1, width=20,bg="#ffffff", command=deleteChatroom)
     openBtn = tk.Button(master=chatwindow, text="Open chatroom", font=("Calibri", 16), height=1, width=20, bg="#ffffff",command=openChatroom)
-
 
     createBtn.grid(row=0, column=0)
     editBtn.grid(row=1, column=0)
@@ -400,9 +399,7 @@ while True:
         elif(query[0] == 'addper'):
             chatsManager.addMemberTo( query[1], query[2] )
         elif(query[0] == 'remove'):
-            # ! The problem is that the server tells you to delete yourself as well and it wont be able to
-            try: chatsManager.removeMemberFrom( query[1], query[2] )
-            except: pass
+            chatsManager.removeMemberFrom( query[1], query[2] )
         elif(query[0] == 'addmsg'):
             chatsManager.addMsgTo(query[1],query[2],query[3],query[4])
 
