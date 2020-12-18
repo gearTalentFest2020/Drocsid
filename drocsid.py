@@ -61,7 +61,7 @@ def remContact( ):
     ID = tk.Entry( master = remContactFrame, font = ("Calibri", 16))
     ID.insert(string = "Enter contact's ID", index = 0)
 
-    confirmBtn = tk.Button( master = remContactFrame, text = "Remove", font = ("Calibri", 16), command = lambda : contacts.remContact(ID.get()) and back(), fg = "#008000")
+    confirmBtn = tk.Button( master = remContactFrame, text = "Remove", font = ("Calibri", 16), command = lambda : contacts.remContact(ID.get()) or back(), fg = "#008000")
     backBtn = tk.Button(master = remContactFrame, text = "Cancel", font = ("Calibri", 16), command = back)
 
     ID.pack()
@@ -90,7 +90,7 @@ def altContact( ):
     name = tk.Entry( master = altContactFrame, font = ("Calibri", 16))
 
     confirmBtn1 = tk.Button( master = altContactFrame, text = "Edit", font = ("Calibri", 16), command = lambda : name.insert(string = contacts[ID.get().strip()], index = 0), fg = "#008000")
-    confirmBtn2 = tk.Button( master = altContactFrame, text = "Submit", font = ("Calibri", 16), command = lambda : contacts.altContact(ID.get(), name.get()) and back(), fg = "#008000")
+    confirmBtn2 = tk.Button( master = altContactFrame, text = "Submit", font = ("Calibri", 16), command = lambda : contacts.altContact(ID.get(), name.get()) or back(), fg = "#008000")
     backBtn = tk.Button(master = altContactFrame, text = "Cancel", font = ("Calibri", 16), command = back)
 
     ID.pack()
