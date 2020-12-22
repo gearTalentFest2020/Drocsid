@@ -142,7 +142,7 @@ def createforothers( chatroom, uids, target = None ):
 
 def remove( chatroom, uids ):
     for uid in uids:
-        msg = sendPrefix + 'remper' + delim + str(uid) + delim + str(chatroom)
+        msg = sendPrefix + 'remper' + delim + str(uid) + delim + str(chatroom) + delim + str(myUID)
         msg = msg.encode('utf-8')
         sock.sendto(msg, server)
 
