@@ -112,6 +112,13 @@ def recv( ):
             print('address: ', addr, '\ndata: ', data, sep = '')
 
             tokens = tokenize( data )
+
+            if(tokens[0] == 'create'):
+                people = []
+                for person in tokens[2:]: people.append(person)
+                tokens = tokens[:2]
+                tokens.append(people)
+
             queryList.append(tokens)
 
             # create;room_name;[people in room by UID]

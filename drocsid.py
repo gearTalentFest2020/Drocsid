@@ -28,12 +28,8 @@ def addContact( ):
     def back():
         addContactFrame.destroy()
         setNormal(remContactBtn, altContactBtn)
-        # remContactBtn["state"] = tk.NORMAL
-        # altContactBtn["state"] = tk.NORMAL
 
     setDisabled(remContactBtn, altContactBtn)
-    # remContactBtn["state"] = tk.DISABLED
-    # altContactBtn["state"] = tk.DISABLED
 
     addContactFrame = tk.Frame( master = mainWindow )
 
@@ -59,12 +55,8 @@ def remContact( ):
     def back():
         remContactFrame.destroy()
         setNormal( addContactBtn, altContactBtn )
-        # addContactBtn["state"] = tk.NORMAL
-        # altContactBtn["state"] = tk.NORMAL
 
     setDisabled( addContactBtn, altContactBtn )
-    # addContactBtn["state"] = tk.DISABLED
-    # altContactBtn["state"] = tk.DISABLED
 
     remContactFrame = tk.Frame( master = mainWindow )
 
@@ -87,12 +79,8 @@ def altContact( ):
     def back():
         altContactFrame.destroy()
         setNormal( addContactBtn, remContactBtn )
-        # addContactBtn["state"] = tk.NORMAL
-        # remContactBtn["state"] = tk.NORMAL
 
     setDisabled( addContactBtn, remContactBtn )
-    # addContactBtn["state"] = tk.DISABLED
-    # remContactBtn["state"] = tk.DISABLED
 
     altContactFrame = tk.Frame( master = mainWindow )
 
@@ -122,12 +110,10 @@ def createChatroom():
     def submit():
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
 
-
         chatname = name.get().strip()
         Client.myUIDs = [i.strip() for i in people.get().split(',')]
-        Client.createforothers(chatname, Client.myUIDs)
         Client.myUIDs.append(Client.myUID)
-        queryList.append(['create', chatname, Client.myUIDs])
+        Client.createforothers(chatname, Client.myUIDs)
         CreateChatFrame.destroy()
 
     def back():
@@ -162,7 +148,6 @@ def deleteChatroom():
 
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
 
-
         chatname = name.get().strip()
         members = chatsManager.getMembersOf(chatname)
         members.remove(Client.myUID)
@@ -194,11 +179,6 @@ def editChatroom():
 
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
 
-        # createBtn['state'] = tk.NORMAL
-        # editBtn['state'] = tk.NORMAL
-        # deleteBtn['state'] = tk.NORMAL
-        # openBtn['state'] = tk.NORMAL
-
         chatname = name.get().strip()
         Client.myUID_add = peopleadd.get().strip()
         Client.add(chatname, chatsManager.getMembersOf(chatname), Client.myUID_add)
@@ -209,25 +189,15 @@ def editChatroom():
 
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
 
-        # createBtn['state'] = tk.NORMAL
-        # editBtn['state'] = tk.NORMAL
-        # deleteBtn['state'] = tk.NORMAL
-        # openBtn['state'] = tk.NORMAL
         EditChatFrame.destroy()
 
     setDisabled(createBtn, editBtn, deleteBtn, openBtn)
-
-    # createBtn['state'] = tk.DISABLED
-    # editBtn['state'] = tk.DISABLED
-    # deleteBtn['state'] = tk.DISABLED
-    # openBtn['state'] = tk.DISABLED
 
     name = tk.Entry(master=EditChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
 
     peopleadd = tk.Entry(master=EditChatFrame, font=("Calibri", 16), width=36)
-    peopleadd.insert(string="Enter Client.myUID of the person you want to add", index=0)
-
+    peopleadd.insert(string="Enter UID of the person you want to add", index=0)
 
     confirmBtn = tk.Button(master=EditChatFrame, text="Submit", font=("Calibri", 16), command=Edit,fg="#008000")
     backBtn = tk.Button(master=EditChatFrame, text="Cancel", font=("Calibri", 16), command=back)
@@ -245,18 +215,9 @@ def openChatroom():
     def back():
 
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
-        # createBtn['state'] = tk.NORMAL
-        # editBtn['state'] = tk.NORMAL
-        # deleteBtn['state'] = tk.NORMAL
-        # openBtn['state'] = tk.NORMAL
         OpenChatFrame.destroy()
 
     setDisabled(createBtn, editBtn, deleteBtn, openBtn)
-
-    # createBtn['state'] = tk.DISABLED
-    # editBtn['state'] = tk.DISABLED
-    # deleteBtn['state'] = tk.DISABLED
-    # openBtn['state'] = tk.DISABLED
 
     chatnames = chatsManager.getRooms()
 
@@ -269,21 +230,13 @@ def openChatroom():
     OpenChatFrame.grid(rowspan = 3, column = 1)
     backBtn.pack(fill = tk.X)
 
-def chatMainWindow(chatname):
-    Window = getWindow("Drocsid", "450x800")
+def chatMainWindow( chatname ):
 
+    Window = getWindow("Drocsid", "450x800")
+    Window.configure( bg = "#17202A" )
     setNormal(createBtn, editBtn, deleteBtn, openBtn)
 
-    # createBtn['state'] = tk.NORMAL
-    # editBtn['state'] = tk.NORMAL
-    # deleteBtn['state'] = tk.NORMAL
-    # openBtn['state'] = tk.NORMAL
-
-    currentlyOpenChat = chatname
-
     def layout(name):
-
-        Window.configure( bg = "#17202A" )
 
         labelHead = tk.Label(Window, bg = "#17202A", fg = "#EAECEE", text = name , font = "Helvetica 13 bold", pady = 5)
         labelHead.place(relwidth = 1)
@@ -295,7 +248,6 @@ def chatMainWindow(chatname):
         for i in tup_msgs:
             msg += str(i[0]) + "\t" + contacts[i[1]] + "\n" + i[2]+"\n\n"
         print(msg)
-
 
         global textCons
         textCons = tk.Text(Window, height = 2, bg = "#17202A", fg = "#EAECEE", font = "Helvetica 14", padx = 5, pady = 5)
@@ -318,7 +270,7 @@ def chatMainWindow(chatname):
         buttonMsg.place(relx = 0.77, rely = 0.008, relheight = 0.06, relwidth = 0.22)
         textCons.config(cursor = "arrow")
 
-        reloadButton = tk.Button(labelBottom, text="Reload", font = "Helvetica 10 bold", width = 20, bg = "#ABB2B9", command = lambda : chatMainWindow(chatname) or Window.destroy())
+        reloadButton = tk.Button(labelBottom, text="Reload", font = "Helvetica 10 bold", width = 20, bg = "#ABB2B9", command = lambda : layout(chatname))
 
         # create a scroll bar
         scrollbar = tk.Scrollbar(textCons)
