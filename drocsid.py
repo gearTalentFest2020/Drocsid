@@ -143,7 +143,6 @@ def deleteChatroom():
 
     setDisabled(createBtn, editBtn, deleteBtn, openBtn)
 
-
     def Delete( ):
 
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
@@ -285,7 +284,6 @@ def chatMainWindow( chatname ):
         msg = entryMsg.get()
         timestamp = time.time()
         Client.send(chatname,chatsManager.getMembersOf(chatname),timestamp,msg)
-        queryList.append(['addmsg', chatname, timestamp, Client.myUID,  msg])
 
     layout(chatname)
 
