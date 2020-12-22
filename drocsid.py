@@ -149,9 +149,7 @@ def deleteChatroom():
 
         chatname = name.get().strip()
         members = chatsManager.getMembersOf(chatname)
-        members.remove(Client.myUID)
         Client.remove(chatname, members)
-        queryList.append(['delete', chatname])
         DeleteChatFrame.destroy()
 
     def back():
