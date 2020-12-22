@@ -1,0 +1,41 @@
+Queries processed by the client
+1> Create a room
+
+create;room_name;[people in room by UID]
+
+2> Delete a room
+
+delete;room_name
+
+3> Add a person to the room
+
+addper;room_name;person
+
+4> Remove a person from a room
+
+remper;room_name;person
+
+5> Add a message to a chatroom
+
+addmsg;room_name;timestamp;sender;message
+
+6> Remove a message from the chatroom (TODO)
+
+remmsg
+
+Queries sent by the client
+1> Create the chatroom for a person (sent to only one person)
+
+create;room_name;[people]
+
+2> Add a person to the chatroom (sent to all members of the room)
+
+addper;room_name;person__name
+
+3> Remove self from room (sent to all members of the room)
+
+remper;room_name;selfUID
+
+4> Send a message on the chatroom (sent to all members of the room)
+
+addmsg;room_name;timestamp;selfUID;message
