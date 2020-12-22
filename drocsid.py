@@ -16,16 +16,24 @@ def getWindow( title, geometry ):
     temp.geometry( geometry )
     return temp
 
+def setNormal( *args ):
+    for button in args: button['state'] = tk.NORMAL
+
+def setDisabled( *args ):
+    for button in args: button['state'] = tk.DISABLED
+
 # Function to add a contact
 def addContact( ):
 
     def back():
         addContactFrame.destroy()
-        remContactBtn["state"] = tk.NORMAL
-        altContactBtn["state"] = tk.NORMAL
+        setNormal(remContactBtn, altContactBtn)
+        # remContactBtn["state"] = tk.NORMAL
+        # altContactBtn["state"] = tk.NORMAL
 
-    remContactBtn["state"] = tk.DISABLED
-    altContactBtn["state"] = tk.DISABLED
+    setDisabled(remContactBtn, altContactBtn)
+    # remContactBtn["state"] = tk.DISABLED
+    # altContactBtn["state"] = tk.DISABLED
 
     addContactFrame = tk.Frame( master = mainWindow )
 
@@ -50,11 +58,13 @@ def remContact( ):
 
     def back():
         remContactFrame.destroy()
-        addContactBtn["state"] = tk.NORMAL
-        altContactBtn["state"] = tk.NORMAL
+        setNormal( addContactBtn, altContactBtn )
+        # addContactBtn["state"] = tk.NORMAL
+        # altContactBtn["state"] = tk.NORMAL
 
-    addContactBtn["state"] = tk.DISABLED
-    altContactBtn["state"] = tk.DISABLED
+    setDisabled( addContactBtn, altContactBtn )
+    # addContactBtn["state"] = tk.DISABLED
+    # altContactBtn["state"] = tk.DISABLED
 
     remContactFrame = tk.Frame( master = mainWindow )
 
@@ -76,11 +86,13 @@ def altContact( ):
 
     def back():
         altContactFrame.destroy()
-        addContactBtn["state"] = tk.NORMAL
-        remContactBtn["state"] = tk.NORMAL
+        setNormal( addContactBtn, remContactBtn )
+        # addContactBtn["state"] = tk.NORMAL
+        # remContactBtn["state"] = tk.NORMAL
 
-    addContactBtn["state"] = tk.DISABLED
-    remContactBtn["state"] = tk.DISABLED
+    setDisabled( addContactBtn, remContactBtn )
+    # addContactBtn["state"] = tk.DISABLED
+    # remContactBtn["state"] = tk.DISABLED
 
     altContactFrame = tk.Frame( master = mainWindow )
 
@@ -107,16 +119,12 @@ def altContact( ):
 def createChatroom():
     CreateChatFrame = tk.Frame( master = chatwindow )
 
-    createBtn['state'] = tk.DISABLED
-    editBtn['state'] = tk.DISABLED
-    deleteBtn['state'] = tk.DISABLED
-    openBtn['state'] = tk.DISABLED
-
     def submit():
-        createBtn['state'] = tk.NORMAL
-        editBtn['state'] = tk.NORMAL
-        deleteBtn['state'] = tk.NORMAL
-        openBtn['state'] = tk.NORMAL
+        setNormal(createBtn, editBtn, deleteBtn, openBtn)
+        # createBtn['state'] = tk.NORMAL
+        # editBtn['state'] = tk.NORMAL
+        # deleteBtn['state'] = tk.NORMAL
+        # openBtn['state'] = tk.NORMAL
 
         chatname = name.get().strip()
         Client.myUIDs = [i.strip() for i in people.get().split(',')]
@@ -126,11 +134,19 @@ def createChatroom():
         CreateChatFrame.destroy()
 
     def back():
-        createBtn['state'] = tk.NORMAL
-        editBtn['state'] = tk.NORMAL
-        deleteBtn['state'] = tk.NORMAL
-        openBtn['state'] = tk.NORMAL
+        setNormal(createBtn, editBtn, deleteBtn, openBtn)
+        # createBtn['state'] = tk.NORMAL
+        # editBtn['state'] = tk.NORMAL
+        # deleteBtn['state'] = tk.NORMAL
+        # openBtn['state'] = tk.NORMAL
         CreateChatFrame.destroy()
+
+    setDisabled(createBtn, editBtn, deleteBtn, openBtn)
+
+    # createBtn['state'] = tk.DISABLED
+    # editBtn['state'] = tk.DISABLED
+    # deleteBtn['state'] = tk.DISABLED
+    # openBtn['state'] = tk.DISABLED
 
     name = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
@@ -150,16 +166,21 @@ def createChatroom():
 def deleteChatroom():
     DeleteChatFrame = tk.Frame(master = chatwindow)
 
-    createBtn['state'] = tk.DISABLED
-    editBtn['state'] = tk.DISABLED
-    deleteBtn['state'] = tk.DISABLED
-    openBtn['state'] = tk.DISABLED
+    setDisabled(createBtn, editBtn, deleteBtn, openBtn)
+
+    # createBtn['state'] = tk.DISABLED
+    # editBtn['state'] = tk.DISABLED
+    # deleteBtn['state'] = tk.DISABLED
+    # openBtn['state'] = tk.DISABLED
 
     def Delete( ):
-        createBtn['state'] = tk.NORMAL
-        editBtn['state'] = tk.NORMAL
-        deleteBtn['state'] = tk.NORMAL
-        openBtn['state'] = tk.NORMAL
+
+        setNormal(createBtn, editBtn, deleteBtn, openBtn)
+
+        # createBtn['state'] = tk.NORMAL
+        # editBtn['state'] = tk.NORMAL
+        # deleteBtn['state'] = tk.NORMAL
+        # openBtn['state'] = tk.NORMAL
 
         chatname = name.get().strip()
         members = chatsManager.getMembersOf(chatname)
@@ -169,10 +190,13 @@ def deleteChatroom():
         DeleteChatFrame.destroy()
 
     def back():
-        createBtn['state'] = tk.NORMAL
-        editBtn['state'] = tk.NORMAL
-        deleteBtn['state'] = tk.NORMAL
-        openBtn['state'] = tk.NORMAL
+
+        setNormal(createBtn, editBtn, deleteBtn, openBtn)
+
+        # createBtn['state'] = tk.NORMAL
+        # editBtn['state'] = tk.NORMAL
+        # deleteBtn['state'] = tk.NORMAL
+        # openBtn['state'] = tk.NORMAL
         DeleteChatFrame.destroy()
 
     name = tk.Entry(master=DeleteChatFrame, font=("Calibri", 16))
@@ -189,16 +213,14 @@ def deleteChatroom():
 def editChatroom():
     EditChatFrame = tk.Frame(master=chatwindow)
 
-    createBtn['state'] = tk.DISABLED
-    editBtn['state'] = tk.DISABLED
-    deleteBtn['state'] = tk.DISABLED
-    openBtn['state'] = tk.DISABLED
-
     def Edit():
-        createBtn['state'] = tk.NORMAL
-        editBtn['state'] = tk.NORMAL
-        deleteBtn['state'] = tk.NORMAL
-        openBtn['state'] = tk.NORMAL
+
+        setNormal(createBtn, editBtn, deleteBtn, openBtn)
+
+        # createBtn['state'] = tk.NORMAL
+        # editBtn['state'] = tk.NORMAL
+        # deleteBtn['state'] = tk.NORMAL
+        # openBtn['state'] = tk.NORMAL
 
         chatname = name.get().strip()
         Client.myUID_add = peopleadd.get().strip()
@@ -207,11 +229,21 @@ def editChatroom():
         EditChatFrame.destroy()
 
     def back():
-        createBtn['state'] = tk.NORMAL
-        editBtn['state'] = tk.NORMAL
-        deleteBtn['state'] = tk.NORMAL
-        openBtn['state'] = tk.NORMAL
+
+        setNormal(createBtn, editBtn, deleteBtn, openBtn)
+
+        # createBtn['state'] = tk.NORMAL
+        # editBtn['state'] = tk.NORMAL
+        # deleteBtn['state'] = tk.NORMAL
+        # openBtn['state'] = tk.NORMAL
         EditChatFrame.destroy()
+
+    setDisabled(createBtn, editBtn, deleteBtn, openBtn)
+
+    # createBtn['state'] = tk.DISABLED
+    # editBtn['state'] = tk.DISABLED
+    # deleteBtn['state'] = tk.DISABLED
+    # openBtn['state'] = tk.DISABLED
 
     name = tk.Entry(master=EditChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
@@ -233,17 +265,21 @@ def editChatroom():
 def openChatroom():
     OpenChatFrame = tk.Frame(master = chatwindow)
 
-    createBtn['state'] = tk.DISABLED
-    editBtn['state'] = tk.DISABLED
-    deleteBtn['state'] = tk.DISABLED
-    openBtn['state'] = tk.DISABLED
-
     def back():
-        createBtn['state'] = tk.NORMAL
-        editBtn['state'] = tk.NORMAL
-        deleteBtn['state'] = tk.NORMAL
-        openBtn['state'] = tk.NORMAL
+
+        setNormal(createBtn, editBtn, deleteBtn, openBtn)
+        # createBtn['state'] = tk.NORMAL
+        # editBtn['state'] = tk.NORMAL
+        # deleteBtn['state'] = tk.NORMAL
+        # openBtn['state'] = tk.NORMAL
         OpenChatFrame.destroy()
+
+    setDisabled(createBtn, editBtn, deleteBtn, openBtn)
+
+    # createBtn['state'] = tk.DISABLED
+    # editBtn['state'] = tk.DISABLED
+    # deleteBtn['state'] = tk.DISABLED
+    # openBtn['state'] = tk.DISABLED
 
     chatnames = chatsManager.getRooms()
 
@@ -259,10 +295,12 @@ def openChatroom():
 def chatMainWindow(chatname):
     Window = getWindow("Drocsid", "450x800")
 
-    createBtn['state'] = tk.NORMAL
-    editBtn['state'] = tk.NORMAL
-    deleteBtn['state'] = tk.NORMAL
-    openBtn['state'] = tk.NORMAL
+    setNormal(createBtn, editBtn, deleteBtn, openBtn)
+
+    # createBtn['state'] = tk.NORMAL
+    # editBtn['state'] = tk.NORMAL
+    # deleteBtn['state'] = tk.NORMAL
+    # openBtn['state'] = tk.NORMAL
 
     currentlyOpenChat = chatname
 
