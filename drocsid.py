@@ -8,7 +8,8 @@ contacts = Contacts.contactsManager()
 chatsManager = Contacts.chatroomManager()
 chatsEnabled = False
 queryList = []
-
+currChat = ''
+textCons = None
 # Wrapper around windows
 def getWindow( title, geometry ):
     temp = tk.Tk()
@@ -227,12 +228,15 @@ def openChatroom():
     backBtn.pack(fill = tk.X)
 
 def chatMainWindow( chatname ):
+    global currChat
+    currChat = chatname
 
     Window = getWindow("Drocsid", "450x800")
     Window.configure( bg = "#17202A" )
     setNormal(createBtn, editBtn, deleteBtn, openBtn)
 
     def layout(name):
+        global scrollbar
 
         labelHead = tk.Label(Window, bg = "#17202A", fg = "#EAECEE", text = name , font = "Helvetica 13 bold", pady = 5)
         labelHead.place(relwidth = 1)
@@ -266,19 +270,18 @@ def chatMainWindow( chatname ):
         buttonMsg.place(relx = 0.77, rely = 0.008, relheight = 0.06, relwidth = 0.22)
         textCons.config(cursor = "arrow")
 
-        reloadButton = tk.Button(labelBottom, text="Reload", font = "Helvetica 10 bold", width = 20, bg = "#ABB2B9", command = lambda : layout(chatname))
 
         # create a scroll bar
         scrollbar = tk.Scrollbar(textCons)
         # place the scroll bar into the GUI window
         scrollbar.place(relheight = 1, relx = 0.974)
-        reloadButton.place(rely = 0.05, relx = 0.011)
         scrollbar.config(command = textCons.yview)
-        textCons.config(state = tk.DISABLED)
 
     # function to basically start the thread for sending messages
     def sendButton():
         msg = entryMsg.get()
+        entryMsg.delete(0,tk.END)
+        # scrollbar.set(0, 1)
         timestamp = time.time()
         Client.send(chatname,chatsManager.getMembersOf(chatname),timestamp,msg)
 
@@ -354,6 +357,14 @@ while True:
             chatsManager.createRoom( query[1], query[2] )
         elif(query[0] == 'addmsg'):
             chatsManager.addMsgTo( query[1],query[2],query[3],query[4] )
+            try:
+                if currChat and currChat == query[1]:
+                    msg = (query[2],query[3],query[4])
+                    msg = msg[0] + ' ' + msg[1] + '\n' + msg[2]  + "\n\n"
+                    textCons.insert(tk.END, msg)
+                    textCons.see(tk.END)
+            except:
+                currChat = ''
         elif(query[0] == 'addper'):
             chatsManager.addMemberTo( query[1], query[2] )
         elif(query[0] == 'remper'):
