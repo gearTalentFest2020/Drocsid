@@ -247,12 +247,13 @@ def chatMainWindow( chatname ):
         msg = ""
         for i in tup_msgs:
             msg += str(i[0]) + "\t" + contacts[i[1]] + "\n" + i[2]+"\n\n"
-        print(msg)
+        # print(msg)
 
         global textCons
         textCons = tk.Text(Window, height = 2, bg = "#17202A", fg = "#EAECEE", font = "Helvetica 14", padx = 5, pady = 5)
         textCons.place(relheight = 0.745, relwidth = 1, rely = 0.08)
         textCons.insert(tk.END,msg)
+        textCons.see(tk.END)
 
         labelBottom = tk.Label(Window, bg = "#ABB2B9", height = 80)
         labelBottom.place(relwidth = 1, rely = 0.825)
@@ -282,6 +283,7 @@ def chatMainWindow( chatname ):
         msg = entryMsg.get()
         entryMsg.delete(0,tk.END)
         # scrollbar.set(0, 1)
+        # textCons.yview_moveto(1.0)
         timestamp = time.time()
         Client.send(chatname,chatsManager.getMembersOf(chatname),timestamp,msg)
 
@@ -360,7 +362,7 @@ while True:
             try:
                 if currChat and currChat == query[1]:
                     msg = (query[2],query[3],query[4])
-                    msg = msg[0] + ' ' + msg[1] + '\n' + msg[2]  + "\n\n"
+                    msg = msg[0] + ' ' + contacts.getName(msg[1]) + '\n' + msg[2]  + "\n\n"
                     textCons.insert(tk.END, msg)
                     textCons.see(tk.END)
             except:
