@@ -51,10 +51,10 @@ sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
 # # virtually connect to server
 # # print("punching")
 sock.sendto(b'', server)
-sock.sendto(b'', server)
-sock.sendto(b'', server)
-sock.sendto(b'', server)
-sock.sendto(b'', server)
+# sock.sendto(b'', server)
+# sock.sendto(b'', server)
+# sock.sendto(b'', server)
+# sock.sendto(b'', server)
 # sock.sendto('1VsV3V;online'.encode('utf-8'), server)
 # time.sleep(3)
 # print('Sending 2nd time')
@@ -98,7 +98,7 @@ def send(chatroom, chatroom_UIDs, timestamp = None, msg = '' ):
         timestamp = time.time()
     for contact in chatroom_UIDs:
         print(msg)
-        msg = sendPrefix + "send;" + str(contact) + ';' + str(chatroom) + ';' + str(timestamp) + ';' + tmp
+        msg = sendPrefix + "addmsg;" + str(contact) + ';' + str(chatroom) + ';' + str(timestamp) + ';' + tmp
         msg = msg.encode("UTF-8") # encode the string
         sock.sendto(msg, server)  # sends message
 

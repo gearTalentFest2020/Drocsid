@@ -121,10 +121,7 @@ def createChatroom():
 
     def submit():
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
-        # createBtn['state'] = tk.NORMAL
-        # editBtn['state'] = tk.NORMAL
-        # deleteBtn['state'] = tk.NORMAL
-        # openBtn['state'] = tk.NORMAL
+
 
         chatname = name.get().strip()
         Client.myUIDs = [i.strip() for i in people.get().split(',')]
@@ -135,18 +132,10 @@ def createChatroom():
 
     def back():
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
-        # createBtn['state'] = tk.NORMAL
-        # editBtn['state'] = tk.NORMAL
-        # deleteBtn['state'] = tk.NORMAL
-        # openBtn['state'] = tk.NORMAL
+
         CreateChatFrame.destroy()
 
     setDisabled(createBtn, editBtn, deleteBtn, openBtn)
-
-    # createBtn['state'] = tk.DISABLED
-    # editBtn['state'] = tk.DISABLED
-    # deleteBtn['state'] = tk.DISABLED
-    # openBtn['state'] = tk.DISABLED
 
     name = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
@@ -168,19 +157,11 @@ def deleteChatroom():
 
     setDisabled(createBtn, editBtn, deleteBtn, openBtn)
 
-    # createBtn['state'] = tk.DISABLED
-    # editBtn['state'] = tk.DISABLED
-    # deleteBtn['state'] = tk.DISABLED
-    # openBtn['state'] = tk.DISABLED
 
     def Delete( ):
 
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
 
-        # createBtn['state'] = tk.NORMAL
-        # editBtn['state'] = tk.NORMAL
-        # deleteBtn['state'] = tk.NORMAL
-        # openBtn['state'] = tk.NORMAL
 
         chatname = name.get().strip()
         members = chatsManager.getMembersOf(chatname)
@@ -193,10 +174,6 @@ def deleteChatroom():
 
         setNormal(createBtn, editBtn, deleteBtn, openBtn)
 
-        # createBtn['state'] = tk.NORMAL
-        # editBtn['state'] = tk.NORMAL
-        # deleteBtn['state'] = tk.NORMAL
-        # openBtn['state'] = tk.NORMAL
         DeleteChatFrame.destroy()
 
     name = tk.Entry(master=DeleteChatFrame, font=("Calibri", 16))
