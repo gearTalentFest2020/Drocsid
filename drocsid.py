@@ -27,7 +27,7 @@ def addContact( ):
     remContactBtn["state"] = tk.DISABLED
     altContactBtn["state"] = tk.DISABLED
 
-    addContactFrame = tk.Frame( master = mainWindow)
+    addContactFrame = tk.Frame( master = mainWindow )
 
     name = tk.Entry( master = addContactFrame, font = ("Calibri", 16))
     name.insert(string = "Enter contact's name", index = 0)
@@ -131,7 +131,6 @@ def createChatroom():
         deleteBtn['state'] = tk.NORMAL
         openBtn['state'] = tk.NORMAL
         CreateChatFrame.destroy()
-
 
     name = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
     name.insert(string="Enter Chatroom name", index=0)
@@ -319,7 +318,7 @@ def chatMainWindow(chatname):
         msg = entryMsg.get()
         timestamp = time.time()
         Client.send(chatname,chatsManager.getMembersOf(chatname),timestamp,msg)
-        queryList.append(['recv', chatname, timestamp, Client.myUID,  msg])
+        queryList.append(['addmsg', chatname, timestamp, Client.myUID,  msg])
 
     layout(chatname)
 
@@ -385,14 +384,13 @@ while True:
         name = query[1]
         if(query[0] == 'create'):
             chatsManager.createRoom( query[1], query[2] )
-        elif(query[0] == 'delete'):
-            chatsManager.deleteRoom( query[1] )
-        elif(query[0] == 'addper'):
-            chatsManager.addMemberTo( query[1], query[2] )
-        elif(query[0] == 'remove'):
-            chatsManager.removeMemberFrom( query[1], query[2] )
         elif(query[0] == 'addmsg'):
             chatsManager.addMsgTo( query[1],query[2],query[3],query[4] )
+        elif(query[0] == 'addper'):
+            chatsManager.addMemberTo( query[1], query[2] )
+        elif(query[0] == 'remper'):
+            if(query[2] == Client.myUID): chatsManager.deleteRoom( query[1] )
+            else: chatsManager.removeMemberFrom( query[1], query[2] )
 
     queryList = []
 

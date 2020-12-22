@@ -82,14 +82,20 @@ def deTokenize( tokens ):
 
 def connect():
     global sendPrefix
-    sendPrefix = str(myUID) + ';'
+    sendPrefix = str(myUID) + delim
     msg = sendPrefix + 'online'
-    msg = msg.encode('utf-8')
-    sock.sendto(msg, server)
+    sock.sendto(msg.encode('utf-8'), server)
 
-def send(chatroom, chatroom_UIDs, timestamp=None, msg = '' ):
-    if not timestamp: timestamp = time.time()
+def stop():
+    msg = sendPrefix + 'ofline'
+    sock.sendto(msg.encode('utf-8'), server)
+
+def send(chatroom, chatroom_UIDs, timestamp = None, msg = '' ):
+
     tmp = msg
+
+    if not timestamp:
+        timestamp = time.time()
     for contact in chatroom_UIDs:
         print(msg)
         msg = sendPrefix + "send;" + str(contact) + ';' + str(chatroom) + ';' + str(timestamp) + ';' + tmp
@@ -103,65 +109,42 @@ def recv( ):
         data, addr = sock.recvfrom(BUFSIZ)
 
         if data:
-            print('address:', addr)
-            print(data)
+            print('address: ', addr, '\ndata: ', data, sep = '')
 
             tokens = tokenize( data )
-            query = []
+            queryList.append(tokens)
 
-            if(tokens[0] == 'recv'):
-                name = tokens[1]
-                sender = tokens[2]
-                timestamp = tokens[3]
-                msg = ";".join(tokens[4:])
-                query += ['addmsg', name, timestamp, sender, msg]
+            # create;room_name;[people in room by UID]
+            # delete;room_name
+            # addper;room_name;person
+            # remper;room_name;person
+            # addmsg;room_name;timestamp;sender;message
 
-            elif(tokens[0] == 'create'):
-                name = tokens[1]
-                members = tokens[2:]
-                query += ['create', name, members]
-
-            elif(tokens[0] == 'remove'):
-                name = tokens[1]
-                sender = tokens[2]
-                query += ['remove', name, sender]
-
-            elif(tokens[0] == 'addper'):
-                name = tokens[1]
-                toAdd = tokens[2]
-                query += ['addper', tokens[1], tokens[2]]
-
-            queryList.append(query)
     return queryList
 
-def createforothers( chatroom, uids , target = None ):
+def createforothers( chatroom, uids, target = None ):
     if target is None:
         for uid in uids:
-            msg = sendPrefix + 'create;' + str(uid) + ';' + str(chatroom) + ';' + ';'.join(uids)
+            msg = sendPrefix + 'create' + delim + str(uid) + delim + str(chatroom) + delim + delim.join(uids)
             msg = msg.encode('utf-8')
             sock.sendto(msg, server)
     else:
-        msg = sendPrefix + 'create;' + str(target) + ';' + str(chatroom) + ';' + ';'.join(uids)
+        msg = sendPrefix + 'create' + delim + str(target) + delim + str(chatroom) + delim + delim.join(uids)
         msg = msg.encode('utf-8')
         sock.sendto(msg, server)
 
 def remove( chatroom, uids ):
     for uid in uids:
-        msg = sendPrefix + 'remove;' + str(uid) + ';' + str(chatroom)
+        msg = sendPrefix + 'remper' + delim + str(uid) + delim + str(chatroom)
         msg = msg.encode('utf-8')
         sock.sendto(msg, server)
 
 def add( chatroom, uids , targetUID):
     for uid in uids:
-        msg = sendPrefix + 'addper;' + str(uid) + ';' + str(chatroom) + ';' + str(targetUID)
+        msg = sendPrefix + 'addper' + delim + str(uid) + delim + str(chatroom) + delim + str(targetUID)
         msg = msg.encode('utf-8')
         sock.sendto(msg, server)
+
     uids.append(targetUID)
     uids.remove(myUID)
     createforothers(chatroom, uids, targetUID)
-
-def stop():
-    msg = sendPrefix + 'ofline'
-    msg = msg.encode('utf-8')
-    sock.sendto(msg, server)
-

@@ -5,7 +5,10 @@ from baseChange import *
 class contactsManager:
 
     def __init__( self ):
+
         self.contacts = {}
+        self.names = {}
+
         if(not os.path.exists('Contacts.txt')):
             f = open('Contacts.txt', 'w')
             f.write(self.generateUID()+'\n')
@@ -23,6 +26,7 @@ class contactsManager:
             tokens = line.split(';')
             assert len(tokens)==2, "Corrupted Contacts File"
             self.contacts.setdefault(tokens[0], tokens[1])
+            self.names.setdefault(tokens[1], tokens[0])
         contacts_file.close()
 
         return self.UID.strip()
@@ -33,13 +37,29 @@ class contactsManager:
         for ID in self.contacts: contacts_file.write(ID + ";" + self.contacts[ID] + '\n')
 
     def addContact( self, ID, name):
-        self.contacts.setdefault(ID.strip(), name.strip())
+
+        ID = ID.strip()
+        name = name.strip()
+
+        self.contacts.setdefault( ID, name )
+        self.names.setdefault( name, ID )
 
     def remContact( self, ID ):
-        self.contacts.pop( ID.strip() )
 
-    def altContact( self, ID, name):
-        self.contacts[ID.strip()] = name.strip()
+        ID = ID.strip()
+
+        self.names.pop( self.contacts[ID] )
+        self.contacts.pop( ID )
+
+    def altContact( self, ID, name ):
+
+        ID = ID.strip()
+        name = name.strip()
+
+        oldName = self.contacts[ID]
+        self.contacts[ID] = name
+        self.names.pop(oldName)
+        self.names[name] = ID
 
     def generateUID( self ):
         timestamp = str(int(time.time()))
@@ -48,6 +68,12 @@ class contactsManager:
 
     def __getitem__( self, key ):
         return self.contacts.get(key, key)
+
+    def getName( self, key ):
+        return self.contacts.get(key, key)
+
+    def getUID( self, key ):
+        return self.names.get(key, '')
 
 class chatroomManager:
 
