@@ -38,6 +38,8 @@
 import socket
 import selectors
 
+delim = ';'
+
 BUFSIZ = 4096
 
 selfIp = socket.gethostbyname(socket.gethostname())
@@ -46,7 +48,6 @@ selfPort = 16384
 ip_table = { }
 req_table = { }
 
-#socketManager = selectors.DefaultSelector(  )
 listener = socket.socket( family = socket.AF_INET, type = socket.SOCK_DGRAM )
 listener.bind(("", selfPort))
 
@@ -59,93 +60,71 @@ socketManager.register(listener, selectors.EVENT_READ, True)
 
 print('I am', (selfIp, selfPort))
 
+def tokenize( obj ):
+    obj = obj.decode()
+    tokens = [elem.strip() for elem in obj.split(delim)]
+    return tokens
+
+def deTokenize( tokens ):
+    for i in range(len(tokens)): tokens[i] = tokens[i].strip()
+    msg = delim.join(tokens)
+    return msg.encode('utf-8')
+
 def networking( ):
-    for ip in whitelisted_ips:
-        listener.sendto(b'', (ip, selfPort))
+    for ip in whitelisted_ips:  listener.sendto(b'', (ip, selfPort))
+
     for key in req_table:
-        if(not (ip_table.get(key, None) is None)):
+        if(ip_table.get(key, None)):
             for query in req_table[key]:
                 print(query)
-                msg = query[0] + ';' + query[1] + ';'
-                if(query[0] == 'create'):
-                    for UID in query[2]:
-                        msg += UID + ';'
-                    msg = msg[:-1:]
+                msg = deTokenize(query)
+                listener.sendto(msg, ip_table[key])
 
-                elif(query[0] == 'remove'):
-                    msg += query[2]
-
-                elif(query[0] == 'recv'):
-                    msg += query[2] + ';' + query[3]
-
-                elif(query[0] == 'addper'):
-                    msg += query[2]
-
-                listener.sendto(msg.encode('utf8'), ip_table[key])
-
-            req_table[key] = []
+            req_table.pop(key)
 
     events = socketManager.select(timeout = 0.01)
-    for(key, mask) in events:
+
+    for (key, mask) in events:
         msg, addr = listener.recvfrom(BUFSIZ)
-        if not msg : continue
-        msg = (msg.decode()).split(';')
+        if msg:
+            tokens = tokenize(msg)
 
-        sender = msg[0] # This is the UID of the sender
-        query = msg[1] # This is the actual query of the user
+            sender = tokens[0]
+            query = tokens[1]
 
-        # Add phone number to table
-        if(query == 'online'):
-            ip_table.setdefault(sender, addr)
-            print(ip_table)
+            # Add UID to table
+            if(query == 'online'):
+                ip_table.setdefault(sender, addr)
+                print(ip_table)
 
-        # Remove phone number to table
-        elif(query == 'ofline'):
-            ip_table.pop(sender)
-            print(ip_table)
+            # Remove UID from table
+            elif(query == 'ofline'):
+                ip_table.pop(sender)
+                print(ip_table)
 
-        # Create a chatroom with a certain name for a certain user
-        elif(query == 'create'):
+            else:
+                target = msg[2]
+                room_name = msg[3]
 
-            target = msg[2]
-            name = msg[3]
+                request = [query, room_name]
 
-            UIDs = [sender]
-            for UID in msg[4:]: UIDs.append(UID)
+                if(req_table.get(target, None) is None): req_table[target] = []
 
-            if(req_table.get(target, None) is None): req_table[target] = []
-            req_table[target].append(['create', name, UIDs])
+                if(query == 'create'):
+                    people = tokens[4:]
+                    #! request.append(people)
+                    request += people
+                elif(query == 'addper'):
+                    newPerson = tokens[4]
+                    request.append(newPerson)
+                elif(query == 'remper'):
+                    toRemove = tokens[4]
+                    request.append(toRemove)
+                elif(query == 'addmsg'):
+                    timestamp = tokens[4]
+                    message = tokens[5]
+                    request += [timestamp, message]
 
-        # Remove a person from the chatroom of other people
-        elif(query == 'remove'):
-
-            target = msg[2]
-            name = msg[3]
-
-            if(req_table.get(target, None) is None): req_table[target] = []
-            req_table[target].append(['remove', name, sender])
-
-        # Send a message to a person on a particular chatroom
-        elif(query == 'send'):
-
-            target = msg[2]
-            name = msg[3]
-
-            data = msg[4:]
-            temp = ''
-            for elem in data: temp += elem + ';'
-            data = temp[:-1]
-
-            if(req_table.get(target, None) is None): req_table[target] = []
-            req_table[target].append(['recv', name, sender, data])
-
-        elif(query == 'addper'):
-
-            target = msg[2]
-            name = msg[3]
-            toAdd = msg[4]
-
-            if(req_table.get(target, None) is None): req_table[target] = []
-            req_table[target].append(['addper', name, toAdd])
+                req_table[target].append(request)
 
 while True: networking( )

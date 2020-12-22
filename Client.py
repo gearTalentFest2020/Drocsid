@@ -23,6 +23,9 @@ import pickle, bz2, time
 import selectors, multiprocessing
 import sys, os
 
+
+delim = ';'
+
 BUFSIZ = 4096
 
 myPort = 16384
@@ -67,6 +70,16 @@ sock.sendto(b'', server)
 # sock.sendto('1VsV3V;ofline'.encode('utf-8'), server)
 sock.setblocking( False )
 
+def tokenize( obj ):
+    obj = obj.decode()
+    tokens = [elem.strip() for elem in obj.split(delim)]
+    return tokens
+
+def deTokenize( tokens ):
+    for i in range(len(tokens)): tokens[i] = tokens[i].strip()
+    msg = delim.join(tokens)
+    return msg.encode('utf-8')
+
 def connect():
     global sendPrefix
     sendPrefix = str(myUID) + ';'
@@ -88,13 +101,12 @@ def recv( ):
     events = socketManager.select( timeout = 0.01 )
     for (key, mask) in events:
         data, addr = sock.recvfrom(BUFSIZ)
-        data = data.decode()
 
         if data:
             print('address:', addr)
             print(data)
 
-            tokens = data.split(';')
+            tokens = tokenize( data )
             query = []
 
             if(tokens[0] == 'recv'):
