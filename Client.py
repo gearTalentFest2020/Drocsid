@@ -153,5 +153,4 @@ def add( chatroom, uids , targetUID):
         sock.sendto(msg, server)
 
     uids.append(targetUID)
-    uids.remove(myUID)
     createforothers(chatroom, uids, targetUID)

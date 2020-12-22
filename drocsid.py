@@ -179,7 +179,6 @@ def editChatroom():
         chatname = name.get().strip()
         Client.myUID_add = peopleadd.get().strip()
         Client.add(chatname, chatsManager.getMembersOf(chatname), Client.myUID_add)
-        queryList.append(['addper', chatname, Client.myUID_add])
         EditChatFrame.destroy()
 
     def back():
