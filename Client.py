@@ -28,7 +28,7 @@ delim = ';'
 
 BUFSIZ = 4096
 
-myPort = 16384
+myPort = 25000
 sock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
 sock.bind(("", myPort))
 # sock.bind((socket.gethostbyname(socket.gethostname()), myPort))
@@ -42,7 +42,7 @@ socketManager.register( sock, selectors.EVENT_READ, None )
 active_chatroom = None
 
 serverIP = str(input('Enter the server IP address: '))
-serverPort = 16384
+serverPort = 25000
 server = (serverIP, serverPort)
 sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
 
