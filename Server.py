@@ -73,7 +73,7 @@ def deTokenize( tokens ):
     return msg.encode('utf-8')
 
 def networking( ):
-    for ip in whitelisted_ips:  listener.sendto(b'', (ip, selfPort))
+    # for ip in whitelisted_ips:  listener.sendto(b'', (ip, selfPort))
     for key in req_table:
         if(ip_table.get(key, None)):
             for query in req_table[key]:
