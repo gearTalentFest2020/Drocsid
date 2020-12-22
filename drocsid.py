@@ -127,7 +127,7 @@ def createChatroom():
     name.insert(string="Enter Chatroom name", index=0)
 
     people = tk.Entry(master=CreateChatFrame, font=("Calibri", 16))
-    people.insert(string="Enter Client.myUIDs of the people (comma seperated)", index=0)
+    people.insert(string="Enter UIDs of the people (comma seperated)", index=0)
 
     confirmBtn = tk.Button(master=CreateChatFrame, text="Submit", font=("Calibri", 16), command= submit, fg="#008000")
     backBtn = tk.Button(master=CreateChatFrame, text="Cancel", font=("Calibri", 16), command = back)
