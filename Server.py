@@ -43,7 +43,7 @@ delim = ';'
 BUFSIZ = 4096
 
 selfIp = socket.gethostbyname(socket.gethostname())
-selfPort = 16384
+selfPort = 25000
 
 ip_table = { }
 req_table = { }
@@ -86,6 +86,8 @@ def networking( ):
 
     for (key, mask) in events:
         msg, addr = listener.recvfrom(BUFSIZ)
+        print('msg:', msg)
+        print('addr:', addr)
         if msg:
             tokens = tokenize(msg)
 
@@ -99,7 +101,10 @@ def networking( ):
 
             # Remove UID from table
             elif(query == 'ofline'):
-                ip_table.pop(sender)
+                try:
+                    ip_table.pop(sender)
+                except Exception as e:
+                    print(e)
                 print(ip_table)
 
             else:
