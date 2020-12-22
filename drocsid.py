@@ -374,6 +374,12 @@ selectChatroomFrame = tk.Frame( mainWindow )
 
 Title = tk.Label(master = mainWindow, text= "DROCSID", font = ("Calibri", 30),bg = backgroundDefault, fg = "#ffffff")
 
+with open("Contacts.txt","r")as file:
+    MyUID=f"MyUIDis{file.readline()}"
+
+MyUIDLabel=tk.Label(master=mainWindow,text=MyUID,font=("Calibri",10),bg=backgroundDefault,fg="#ffffff")
+MyUIDLabel.grid(row=3)
+
 addContactBtn = tk.Button( master = optionsFrame, text = "Add Contact", font = ("Consolas", 20), command = addContact, bg = btnDefault, fg = btnTxtDefault )
 remContactBtn = tk.Button( master = optionsFrame, text = "Remove Contact", font = ("Calibri", 20), command = remContact, bg = btnDefault, fg = btnTxtDefault )
 altContactBtn = tk.Button( master = optionsFrame, text = "Edit Contact", font = ("Calibri", 20), command = altContact, bg = btnDefault, fg = btnTxtDefault )
