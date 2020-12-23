@@ -60,13 +60,13 @@ listener.listen(15)
 def tokenize( obj ):
     obj = obj.decode()
     tokens = [elem.strip() for elem in obj.split(delim)]
-    print(tokens)
+    print('tokens:', tokens)
     return tokens
 
 def deTokenize( tokens ):
     # for i in range(len(tokens)): tokens[i] = tokens[i].strip()
     msg = delim.join(tokens)
-    print(msg)
+    print('deTokenized msg:', msg)
     return msg.encode('utf-8')
 
 def acc(sock):
@@ -91,19 +91,19 @@ def read(sock):
         # Add UID to table
         if(query == 'online'):
             ip_table.setdefault(sender, sock)
-            print(ip_table)
+            print('ip_table:', ip_table)
 
         # Remove UID from table
         elif(query == 'ofline'):
             try:
                 ip_table.pop(sender)
             except Exception as e:
-                print(e)
-            print(ip_table)
+                print('EXCEPTION:', e)
+            print('ip_table:', ip_table)
 
         else:
             target = tokens[2]
-            print(target)
+            print('target:', target)
             room_name = tokens[3]
 
             request = [query, room_name]
@@ -139,7 +139,7 @@ def networking( ):
     for key in req_table:
         if(ip_table.get(key, None)):
             for query in req_table[key]:
-                print(query)
+                print('query:', query)
                 msg = deTokenize(query)
                 ip_table[key].sendall( msg )
 
