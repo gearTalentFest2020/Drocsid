@@ -332,7 +332,7 @@ with open("Contacts.txt","r")as file:
 MyUIDLabel=tk.Label(master=mainWindow,text=MyUID,font=("Calibri",10),bg=backgroundDefault,fg="#ffffff")
 MyUIDLabel.grid(row=3)
 
-addContactBtn = tk.Button( master = optionsFrame, text = "Add Contact", font = ("Consolas", 20), command = addContact, bg = btnDefault, fg = btnTxtDefault )
+addContactBtn = tk.Button( master = optionsFrame, text = "Add Contact", font = ("Calibri", 20), command = addContact, bg = btnDefault, fg = btnTxtDefault )
 remContactBtn = tk.Button( master = optionsFrame, text = "Remove Contact", font = ("Calibri", 20), command = remContact, bg = btnDefault, fg = btnTxtDefault )
 altContactBtn = tk.Button( master = optionsFrame, text = "Edit Contact", font = ("Calibri", 20), command = altContact, bg = btnDefault, fg = btnTxtDefault )
 selRoomBtn = tk.Button( master = optionsFrame, text = "Chats", font = ("Calibri", 20), command = selectChatroom, bg = btnDefault, fg = btnTxtDefault )
