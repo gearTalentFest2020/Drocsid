@@ -141,7 +141,7 @@ def networking( ):
             for query in req_table[key]:
                 print(query)
                 msg = deTokenize(query)
-                ip_table[key].sendto( msg )
+                ip_table[key].sendall( msg )
 
             req_table[key] = []
 
