@@ -29,7 +29,7 @@ delim = ';'
 BUFSIZ = 4096
 
 myPort = 25000
-sock = socket.socket( socket.AF_INET, socket.SOCK_DGRAM )
+sock = socket.socket( socket.AF_INET, socket.SOCK_STREAM )
 sock.bind(("", myPort))
 # sock.bind((socket.gethostbyname(socket.gethostname()), myPort))
 
@@ -50,7 +50,7 @@ sendPrefix = str(myUID) + ';' # + str(priv_ip) + ';' + str(myPort)
 # ! TODO IF NOT PUBLICLY HOSTING
 # # virtually connect to server
 # # print("punching")
-sock.sendto(b'', server)
+# sock.sendto(b'', server)
 # sock.sendto(b'', server)
 # sock.sendto(b'', server)
 # sock.sendto(b'', server)
@@ -84,11 +84,19 @@ def connect():
     global sendPrefix
     sendPrefix = str(myUID) + delim
     msg = sendPrefix + 'online'
-    sock.sendto(msg.encode('utf-8'), server)
+    while True:
+        try:
+            sock.connect(server)
+            print('CONNECTED')
+            break
+        except:
+            pass
 
 def stop():
     msg = sendPrefix + 'ofline'
-    sock.sendto(msg.encode('utf-8'), server)
+    msg = msg.encode('utf-8')
+    sock.sendall(msg)
+    sock.close(server)
 
 def send(chatroom, chatroom_UIDs, timestamp = None, msg = '' ):
 
@@ -100,7 +108,7 @@ def send(chatroom, chatroom_UIDs, timestamp = None, msg = '' ):
         print(msg)
         msg = sendPrefix + "addmsg;" + str(contact) + ';' + str(chatroom) + ';' + str(timestamp) + ';' + tmp
         msg = msg.encode("UTF-8") # encode the string
-        sock.sendto(msg, server)  # sends message
+        sock.sendall(msg)  # sends message
 
 def recv( ):
     queryList = []
@@ -134,23 +142,23 @@ def createforothers( chatroom, uids, target = None ):
         for uid in uids:
             msg = sendPrefix + 'create' + delim + str(uid) + delim + str(chatroom) + delim + delim.join(uids)
             msg = msg.encode('utf-8')
-            sock.sendto(msg, server)
+            sock.sendall(msg)
     else:
         msg = sendPrefix + 'create' + delim + str(target) + delim + str(chatroom) + delim + delim.join(uids)
         msg = msg.encode('utf-8')
-        sock.sendto(msg, server)
+        sock.sendall(msg)
 
 def remove( chatroom, uids ):
     for uid in uids:
         msg = sendPrefix + 'remper' + delim + str(uid) + delim + str(chatroom) + delim + str(myUID)
         msg = msg.encode('utf-8')
-        sock.sendto(msg, server)
+        sock.sendall(msg)
 
 def add( chatroom, uids , targetUID):
     for uid in uids:
         msg = sendPrefix + 'addper' + delim + str(uid) + delim + str(chatroom) + delim + str(targetUID)
         msg = msg.encode('utf-8')
-        sock.sendto(msg, server)
+        sock.sendall(msg)
 
     uids.append(targetUID)
     createforothers(chatroom, uids, targetUID)

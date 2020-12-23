@@ -48,17 +48,14 @@ selfPort = 25000
 ip_table = { }
 req_table = { }
 
-listener = socket.socket( family = socket.AF_INET, type = socket.SOCK_DGRAM )
+listener = socket.socket( family = socket.AF_INET, type = socket.SOCK_STREAM )
 listener.bind(("", selfPort))
 
-whitelisted_ips = ["106.201.123.139", "106.200.238.248", "49.207.201.183", "49.37.170.237", "49.207.201.250", "171.61.90.0", "49.207.223.177", "122.178.254.251", "49.37.166.91"]
+# whitelisted_ips = ["106.201.123.139", "106.200.238.248", "49.207.201.183", "49.37.170.237", "49.207.201.250", "171.61.90.0", "49.207.223.177", "122.178.254.251", "49.37.166.91"]
 
 listener.setblocking(False)
+listener.listen(15)
 
-socketManager = selectors.DefaultSelector()
-socketManager.register(listener, selectors.EVENT_READ, True)
-
-print('I am', (selfIp, selfPort))
 
 def tokenize( obj ):
     obj = obj.decode()
@@ -72,66 +69,84 @@ def deTokenize( tokens ):
     print(msg)
     return msg.encode('utf-8')
 
+def acc(sock):
+    global ip_table, req_table
+    conn, addr = sock.accept()
+    print("conn:", conn)
+    print("addr:", addr)
+    conn.setblocking(False)
+    socketManager.register(conn, selectors.EVENT_READ, read)
+
+def read(sock):
+    global ip_table, req_table
+    msg, addr = sock.recvfrom(BUFSIZ)
+    print('msg:', msg)
+    print('addr:', addr)
+    if msg:
+        tokens = tokenize(msg)
+
+        sender = tokens[0]
+        query = tokens[1]
+
+        # Add UID to table
+        if(query == 'online'):
+            ip_table.setdefault(sender, sock)
+            print(ip_table)
+
+        # Remove UID from table
+        elif(query == 'ofline'):
+            try:
+                ip_table.pop(sender)
+            except Exception as e:
+                print(e)
+            print(ip_table)
+
+        else:
+            target = tokens[2]
+            print(target)
+            room_name = tokens[3]
+
+            request = [query, room_name]
+
+            if(req_table.get(target, None) is None): req_table[target] = []
+
+            if(query == 'create'):
+                people = tokens[4:]
+                # request.append(people)
+                request += people
+            elif(query == 'addper'):
+                newPerson = tokens[4]
+                request.append(newPerson)
+            elif(query == 'remper'):
+                toRemove = tokens[4]
+                request.append(toRemove)
+            elif(query == 'addmsg'):
+                timestamp = tokens[4]
+                message = tokens[5]
+                request += [timestamp, sender, message]
+
+            req_table[target].append(request)
+
+
+
+socketManager = selectors.DefaultSelector()
+socketManager.register(listener, selectors.EVENT_READ, acc)
+
+print('I am', (selfIp, selfPort))
+
+
 def networking( ):
-    # for ip in whitelisted_ips:  listener.sendto(b'', (ip, selfPort))
     for key in req_table:
         if(ip_table.get(key, None)):
             for query in req_table[key]:
                 print(query)
                 msg = deTokenize(query)
-                listener.sendto(msg, ip_table[key])
+                ip_table[key].sendto( msg )
 
             req_table[key] = []
 
     events = socketManager.select(timeout = 0.01)
-
     for (key, mask) in events:
-        msg, addr = listener.recvfrom(BUFSIZ)
-        print('msg:', msg)
-        print('addr:', addr)
-        if msg:
-            tokens = tokenize(msg)
-
-            sender = tokens[0]
-            query = tokens[1]
-
-            # Add UID to table
-            if(query == 'online'):
-                ip_table.setdefault(sender, addr)
-                print(ip_table)
-
-            # Remove UID from table
-            elif(query == 'ofline'):
-                try:
-                    ip_table.pop(sender)
-                except Exception as e:
-                    print(e)
-                print(ip_table)
-
-            else:
-                target = tokens[2]
-                print(target)
-                room_name = tokens[3]
-
-                request = [query, room_name]
-
-                if(req_table.get(target, None) is None): req_table[target] = []
-
-                if(query == 'create'):
-                    people = tokens[4:]
-                    # request.append(people)
-                    request += people
-                elif(query == 'addper'):
-                    newPerson = tokens[4]
-                    request.append(newPerson)
-                elif(query == 'remper'):
-                    toRemove = tokens[4]
-                    request.append(toRemove)
-                elif(query == 'addmsg'):
-                    timestamp = tokens[4]
-                    message = tokens[5]
-                    request += [timestamp, sender, message]
-
-                req_table[target].append(request)
+        key.data(key.fileobj)
 
 while True: networking( )
