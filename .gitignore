@@ -1,6 +1,7 @@
 Contacts.txt
 reference.oy.py
 chatroom__*
+Server
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -9,6 +10,7 @@ __pycache__/
 
 # C extensions
 *.so
+*.exe
 
 # Distribution / packaging
 .Python
